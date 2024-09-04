@@ -15,7 +15,7 @@ obj_file:
 	$(CC) $(FLAGS) -o ./obj/$@ -c $<
 
 $(NAME): $(OBJ)
-	cd obj && $(CC) $(FLAGS) $(OBJ) -o ../$(NAME)
+	cd obj && $(CC) $(FLAGS) $(OBJ) -o ../$(NAME) -lreadline
 
 clean:
 	@rm -Rf obj
