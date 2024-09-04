@@ -1,9 +1,12 @@
 CC = cc
-FLAGS = -Wall -Wextra -Werror
+LIBFT = ../libft
+FLAGS = -Wall -Wextra -Werror -g
 NAME = minishell
-SRC = main.c
+
+SRC = main.c \
+	  ft_readline.c
+
 OBJ = $(SRC:.c=.o)
-LIBFT = ../libft/libft.a
 
 ####################### VARIABLES ###########################
 
@@ -16,8 +19,8 @@ obj_file :
 	$(CC) $(FLAGS) -o ./obj/$@ -c $<
 
 $(NAME) : $(OBJ)
-	@make -C libft/
-	cd obj && $(CC) $(FLAGS) $(OBJ) -o ../$(NAME) $(LIBFT) -lreadline
+	@make bonus -C libft/
+	cd obj && $(CC) $(FLAGS) $(OBJ) -o ../$(NAME) -lreadline -L$(LIBFT) -lft
 
 clean :
 	@rm -rf obj
