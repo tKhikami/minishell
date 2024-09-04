@@ -1,24 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_readline.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/04 09:34:02 by atolojan          #+#    #+#             */
-/*   Updated: 2024/09/04 14:36:17 by atolojan         ###   ########.fr       */
+/*   Created: 2024/09/04 13:40:19 by atolojan          #+#    #+#             */
+/*   Updated: 2024/09/04 14:35:51 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "minishell.h"
 
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <signal.h>
-# include <unistd.h>
-# include "libft/libft.h"
+char	*readline(const char *prompt)
+{
+	int	fd;
 
-#endif
+	fd = open("cmd.txt", O_WRONLY | O_CREAT | O_TRUNC)
