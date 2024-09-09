@@ -12,14 +12,30 @@
 
 #include "minishell.h"
 
+void	ft_handle_signals(int sig)
+{
+	if (sig == 2)
+	{
+	ft_printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+	}
+}
+
 int	main(void)
 {
 	char	*str;
 
+	signal(SIGINT, ft_handle_signals);
 	while (1)
 	{
-		str = ft_readline("$>");
-		ft_printf("%s\n", str);
+		str = readline("$>");
+		if (str != NULL)
+		{
+			add_history(str);
+			free(str);
+		}
 	}
 	return (0);
 }
