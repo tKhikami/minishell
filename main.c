@@ -16,26 +16,43 @@ void	ft_handle_signals(int sig)
 {
 	if (sig == 2)
 	{
-	ft_printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+		ft_printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
 	}
 }
 
-int	main(void)
+void	ft_get_line(void)
 {
 	char	*str;
 
-	signal(SIGINT, ft_handle_signals);
 	while (1)
 	{
-		str = readline("$>");
+		str = readline("nyrandri@c1r12s15:~/BORN/minishell$ ");
 		if (str != NULL)
 		{
 			add_history(str);
+			/* execution code goes here */
+			/* ft_printf("%s\n", str); */
 			free(str);
 		}
+		else
+		{
+			rl_clear_history();
+			ft_printf("exit");
+			exit(EXIT_SUCCESS);
+		}
 	}
+	exit(EXIT_SUCCESS);
+}
+
+
+
+int	main(void)
+{
+	signal(SIGINT, ft_handle_signals);
+	ft_get_line();
+
 	return (0);
 }
