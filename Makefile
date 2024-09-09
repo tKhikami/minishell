@@ -10,6 +10,7 @@ OBJ = $(SRC:.c=.o)
 ####################### VARIABLES ###########################
 
 all : obj_file $(NAME)
+	./$(NAME)
 
 obj_file :
 	mkdir -p obj
