@@ -29,7 +29,7 @@ void	ft_get_line(void)
 
 	while (1)
 	{
-		str = readline("nyrandri@c1r12s15:~/BORN/minishell$ ");
+		str = readline("$>");
 		if (str != NULL)
 		{
 			add_history(str);
