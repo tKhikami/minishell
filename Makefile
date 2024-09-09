@@ -4,7 +4,6 @@ FLAGS = -Wall -Wextra -Werror -g
 NAME = minishell
 
 SRC = main.c \
-	  ft_readline.c
 
 OBJ = $(SRC:.c=.o)
 
