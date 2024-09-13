@@ -3,7 +3,7 @@ LIBFT = ../libft
 FLAGS = -Wall -Wextra -Werror -g
 NAME = minishell
 
-SRC = main.c \
+SRC = main.c
 
 OBJ = $(SRC:.c=.o)
 
