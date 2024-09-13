@@ -14,11 +14,16 @@
 
 void	ft_handle_signals(int sig)
 {
-	if (sig == 2)
+	if (sig == SIGINT)
 	{
 		ft_printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	else if (sig == SIGQUIT)
+	{
+		rl_on_new_line();
 		rl_redisplay();
 	}
 }
@@ -29,7 +34,7 @@ void	ft_get_line(void)
 
 	while (1)
 	{
-		str = readline("nyrandri@c1r12s15:~/BORN/minishell$ ");
+		str = readline("$>");
 		if (str != NULL)
 		{
 			add_history(str);
@@ -52,6 +57,7 @@ void	ft_get_line(void)
 int	main(void)
 {
 	signal(SIGINT, ft_handle_signals);
+	signal(SIGQUIT, ft_handle_signals);
 	ft_get_line();
 
 	return (0);

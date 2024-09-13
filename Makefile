@@ -3,8 +3,7 @@ LIBFT = ../libft
 FLAGS = -Wall -Wextra -Werror -g
 NAME = minishell
 
-SRC = main.c \
-	  ft_readline.c
+SRC = main.c
 
 OBJ = $(SRC:.c=.o)
 
