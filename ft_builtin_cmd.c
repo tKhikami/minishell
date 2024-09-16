@@ -31,6 +31,8 @@ int ft_echo(const char **tab)
 			length += write(1, "\n", 1);
 		}
 	}
+	else
+		length += write(1, "\n", 1);
 	return (length);
 }
 
