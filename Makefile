@@ -3,7 +3,12 @@ LIBFT = ../libft
 FLAGS = -Wall -Wextra -Werror -g
 NAME = minishell
 
-SRC = main.c
+SRC = main.c \
+	  ft_free_tab.c \
+	  ft_print_tab_char.c \
+	  ft_builtin_cmd.c \
+	  ft_handle_signals.c \
+	  ft_isnumber.c
 
 OBJ = $(SRC:.c=.o)
 

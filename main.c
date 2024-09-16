@@ -12,22 +12,6 @@
 
 #include "minishell.h"
 
-void	ft_handle_signals(int sig)
-{
-	if (sig == SIGINT)
-	{
-		ft_printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-	else if (sig == SIGQUIT)
-	{
-		rl_on_new_line();
-		rl_redisplay();
-	}
-}
-
 void	ft_get_line(void)
 {
 	char	*str;
@@ -38,18 +22,20 @@ void	ft_get_line(void)
 		if (str != NULL)
 		{
 			add_history(str);
-			char* token = strtok(str, " ");
-			while (token != NULL)
-			{
-				printf("%s\n", token);
-				token = strtok(NULL, " ");
-			}
+			char	**tab = ft_split(str, ' ');
+			int		len = ft_builtin_cmd((const char **)tab);
+			if (len == -1)
+				ft_printf("command not found\n");
+
+			/*execution code goes here*/
+
+			ft_free_tab(tab);
 			free(str);
 		}
 		else
 		{
 			rl_clear_history();
-			ft_printf("exit");
+			ft_printf("exit\n");
 			exit(EXIT_SUCCESS);
 		}
 	}
