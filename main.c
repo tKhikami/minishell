@@ -38,8 +38,12 @@ void	ft_get_line(void)
 		if (str != NULL)
 		{
 			add_history(str);
-			/* execution code goes here */
-			/* ft_printf("%s\n", str); */
+			char* token = strtok(str, " ");
+			while (token != NULL)
+			{
+				printf("%s\n", token);
+				token = strtok(NULL, " ");
+			}
 			free(str);
 		}
 		else
