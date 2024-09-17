@@ -29,7 +29,6 @@ void	ft_get_line(void)
 
 			/*execution code goes here*/
 
-			ft_free_tab(tab);
 			free(str);
 		}
 		else
@@ -42,13 +41,15 @@ void	ft_get_line(void)
 	exit(EXIT_SUCCESS);
 }
 
-
-
-int	main(void)
+int	main(int n, char *arg[], char *env[])
 {
-	signal(SIGINT, ft_handle_signals);
-	signal(SIGQUIT, ft_handle_signals);
-	ft_get_line();
-
+	(void)arg;
+	(void)env;
+	if (n == 1)
+	{
+		signal(SIGINT, ft_handle_signals);
+		signal(SIGQUIT, ft_handle_signals);
+		ft_get_line();
+	}
 	return (0);
 }
