@@ -62,6 +62,10 @@ int ft_builtin_cmd(const char **tab)
 			return (ft_echo(tab));
 		else if (ft_memcmp(tab[0], "exit", 5) == 0)
 			return (ft_exit(tab));
+		else if (ft_memcmp(tab[0], "cd", 3) == 0)
+			return (ft_cd((const char *)tab[1]));
+		else if (ft_memcmp(tab[0], "pwd", 4) == 0)
+			return (ft_pwd((char *)tab[1]));
 	}	
 	return (-1);
 }

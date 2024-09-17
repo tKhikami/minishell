@@ -30,6 +30,8 @@ void	ft_handle_signals(int sig);
 /******************* BUILTIN COMMAD *****************/
 
 int		ft_builtin_cmd(const char **tab);
+int		ft_cd(const char *path);
+int		ft_pwd(char *tab);
 int		ft_echo(const char **tab);
 
 #endif
