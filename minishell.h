@@ -20,6 +20,13 @@
 # include <unistd.h>
 # include "libft/libft.h"
 
+typedef struct	s_node
+{
+	void			*element;
+	struct s_node	*left;
+	struct s_node	*right;
+}	t_node;
+
 /************************ TOOLS *********************/
 
 void	ft_free_tab(char **split);
