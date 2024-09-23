@@ -11,17 +11,11 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
-void	ft_branching(t_node *node, char *flag, int (*ignore)(char *, char *))
-{
-	if (node != NULL)
-	{
-		node->element = 
-*/
+
 void	ft_get_line(void)
 {
 	char	*str;
-//	t_node	*root;
+	t_node	*root;
 
 	while (1)
 	{
@@ -29,11 +23,8 @@ void	ft_get_line(void)
 		if (str != NULL)
 		{
 			add_history(str);
-			char **tab = ft_split(str, ' ');
-//			root = ft_create_tree(str);
-			char *tmp = ft_sub_chainechr(tab[0], tab[1]);
-			ft_printf("%s\n", tmp);
-//			ft_print_tree(root);
+			root = ft_create_tree(str);
+			ft_print_tree(root);
 			free(str);
 		}
 		else

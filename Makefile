@@ -14,7 +14,7 @@ SRC = main.c \
 	  ft_sub_chainechr.c \
 	  ft_print_tree.c \
 	  ft_nodeiter.c \
-	  ft_create_node.c \
+	  ft_create_tree.c \
 	  ft_is_inner_quote.c \
 
 OBJ = $(SRC:.c=.o)
