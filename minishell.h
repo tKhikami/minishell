@@ -40,5 +40,6 @@ int		ft_builtin_cmd(const char **tab);
 int		ft_cd(const char *path);
 int		ft_pwd(char *tab);
 int		ft_echo(const char **tab);
+int		ft_export(char *env[]);
 
 #endif

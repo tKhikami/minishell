@@ -6,7 +6,7 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 13:08:30 by atolojan          #+#    #+#             */
-/*   Updated: 2024/09/17 16:41:43 by nyrandri         ###   ########.fr       */
+/*   Updated: 2024/09/23 11:05:06 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,14 @@ int	ft_pwd(char *tab)
 		return (0);
 	}
 	return (ft_printf("%s\n", getcwd(path, 100)));
+}
+
+int	ft_export(char *env[])
+{
+	int	i;
+
+	i = 0;
+	while (env[i] != NULL)
+		ft_printf("%s\n", env[i++]);
+	return (0);
 }
