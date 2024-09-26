@@ -6,7 +6,7 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 13:08:30 by atolojan          #+#    #+#             */
-/*   Updated: 2024/09/25 08:12:23 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/09/26 10:07:50 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,32 @@ int	ft_pwd(char *tab)
 	return (ft_printf("%s\n", getcwd(path, 100)));
 }
 
+void	print_content(void *content)
+{
+	printf("%s\n", (char *) content);
+}
+
 int	ft_export(char *env[])
 {
 	int	i;
+	t_list	*envp;
+	char	*content;
 
 	i = 0;
+	envp = NULL;
+	content = NULL;
 	while (env[i] != NULL)
-		ft_printf("%s\n", env[i++]);
+	{
+		content = ft_strdup(env[i]);
+		if (!content)
+		{
+			ft_lstclear(&envp, free);
+			return (-1);
+		}
+		ft_lstadd_back(&envp, ft_lstnew(content));
+		i++;
+	}
+	ft_lstiter(envp, print_content);
+	ft_lstclear(&envp, free);
 	return (0);
 }

@@ -31,16 +31,20 @@ void	ft_get_line(void)
 		{
 			rl_clear_history();
 			ft_printf("exit\n");
+			free(str);
 			exit(EXIT_SUCCESS);
 		}
 	}
+	if (str)
+		free(str);
 	exit(EXIT_SUCCESS);
 }
 
 int	main(int n, char *arg[], char *env[])
 {
 	(void)arg;
-	(void)env;
+	//(void)env;
+	ft_export(env);
 	if (n == 1)
 	{
 		signal(SIGINT, ft_handle_signals);
