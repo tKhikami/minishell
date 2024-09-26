@@ -56,6 +56,13 @@ char		*ft_reverse_strtok(char *str, char *delims, int (*ignore)(char *, char *))
 
 /******************* BUILTIN COMMAD *****************/
 
+<<<<<<< HEAD
+int		ft_builtin_cmd(const char **tab);
+int		ft_cd(const char *path);
+int		ft_pwd(char *tab);
+int		ft_echo(const char **tab);
+int		ft_export(char *env[]);
+=======
 int			ft_builtin_cmd(const char **tab);
 int			ft_cd(const char *path);
 int			ft_pwd(char *tab);
@@ -70,5 +77,6 @@ t_node		*ft_create_node(char *str);
 
 void		ft_branching(t_node *node);
 t_node		*ft_create_tree(char *str);
+>>>>>>> e1141fcbd19aef64ff1fd923173528aab63da191
 
 #endif
