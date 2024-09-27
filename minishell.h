@@ -29,13 +29,18 @@
 typedef enum	e_status
 {
 	command,
-	is_pipe,
 	normal_input,
 	normal_output,
 	delim_input,
 	append_output,
 	undefine
 }	t_status;
+
+typedef struct	s_token
+{
+	char		*tok;
+	t_status	type;
+}	t_token;
 
 typedef struct	s_node
 {
