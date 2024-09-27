@@ -12,20 +12,18 @@
 
 #include "minishell.h"
 
-void	ft_print_node(t_node *node, char *flag)
+void	ft_print_node(t_node *node)
 {
 	static int  i;
 
-	(void)flag;
     i++;
     ft_printf("######## %d #######\n", i);
     ft_printf("str  : %s\n", node->str);
-    ft_printf("status   : %d\n", (int)node->stat);
 	ft_printf("left	: %p\n", node->left);
 	ft_printf("right	: %p\n\n", node->right);
 }
 
 void	ft_print_tree(t_node *root)
 {
-	ft_nodeiter((t_node *)root, &ft_print_node, NULL);
+	ft_nodeiter((t_node *)root, &ft_print_node);
 }

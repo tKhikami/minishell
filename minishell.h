@@ -40,7 +40,6 @@ typedef enum	e_status
 typedef struct	s_node
 {
 	char			*str;
-	t_status		stat;
 	struct s_node	*left;
 	struct s_node	*right;
 }	t_node;
@@ -71,13 +70,12 @@ int			ft_echo(const char **tab);
 
 /***************** TREE MANIPULATION ****************/
 
-void		ft_nodeiter(t_node *node, void (*f)(t_node *, char *), char *flag);
-void		ft_print_node(t_node *node, char *flag);
+void		ft_nodeiter(t_node *node, void (*f)(t_node *));
+void		ft_print_node(t_node *node);
 void		ft_print_tree(t_node *node);
 t_node		*ft_create_node(char *str);
 
-t_status	ft_define_status(char *flag);
-void		ft_branching(t_node *node, char *flag);
+void		ft_branching(t_node *node);
 t_node		*ft_create_tree(char *str);
 //>>>>>>> e1141fcbd19aef64ff1fd923173528aab63da191
 
