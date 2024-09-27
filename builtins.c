@@ -6,7 +6,7 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 13:08:30 by atolojan          #+#    #+#             */
-/*   Updated: 2024/09/26 10:07:50 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/09/27 17:07:56 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	print_content(void *content)
 	printf("%s\n", (char *) content);
 }
 
-int	ft_export(char *env[])
+t_list	*env_to_tlist(char *env[])
 {
 	int	i;
 	t_list	*envp;
@@ -54,12 +54,55 @@ int	ft_export(char *env[])
 		if (!content)
 		{
 			ft_lstclear(&envp, free);
-			return (-1);
+			return (NULL);
 		}
 		ft_lstadd_back(&envp, ft_lstnew(content));
 		i++;
 	}
+	return (envp);
+}
+
+int	ft_env(char *env[])
+{
 	ft_lstiter(envp, print_content);
 	ft_lstclear(&envp, free);
 	return (0);
+}
+
+int	is_an_assignation(char *str)
+{
+	int	i;
+	int	nbr_equal;
+
+	i = 1;
+	nbr_equal = 0;
+	if (!ft_isalpha(str[0]) || str[0] != '_')
+		return (0);
+	i = 1;
+	while (str[i] != '\0')
+	{
+		if (str[i] == '=')
+		{
+			if (i != 0 && str[i - 1] != 32)
+			{
+				if (str[i + 1] && str[i + 1] != 32)
+					nbr_equal++;
+			}
+		}
+		i++;
+	}
+	if (nbr_equal != 1)
+		return (0);
+	return (1);
+}
+
+int	ft_export(char *str, t_list *envp)
+{
+	int	assign;
+
+	assign = is_an_assignation(str);
+	if (!assign)
+		return (0);
+	ft_lstadd_back(&envp, ft_lstnew(str));
+	return (1);
 }
