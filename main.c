@@ -26,6 +26,7 @@ void	ft_get_line(int *exit_status)
 			add_history(str);
 			root = ft_create_tree(str);
 			ft_print_tree(root);
+			ft_free_tree(root);
 			free(str);
 		}
 		else

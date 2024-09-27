@@ -46,37 +46,35 @@ typedef struct	s_node
 
 /************************ TOOLS *********************/
 
-void		ft_free_tab(char **split);
-int			ft_print_tab_char(const char **tab);
-int			ft_isnumber(const char *number);
-int			ft_is_inner_quote(char *str, char *to_compare);
-void		ft_handle_signals(int sig);
-char		*ft_sub_chainechr(char *s1, char *s2);
-char		*ft_reverse_strtok(char *str, char *delims, int (*ignore)(char *, char *));
+void	ft_free_tab(char **split);
+int		ft_print_tab_char(const char **tab);
+int		ft_isnumber(const char *number);
+int		ft_is_inner_quote(char *str, char *to_compare);
+void	ft_handle_signals(int sig);
+char	*ft_sub_chainechr(char *s1, char *s2);
+char	*ft_reverse_strtok(char *str, char *delims, int (*ignore)(char *, char *));
 
 /******************* BUILTIN COMMAD *****************/
 
-<<<<<<< HEAD
 int		ft_builtin_cmd(const char **tab);
 int		ft_cd(const char *path);
 int		ft_pwd(char *tab);
 int		ft_echo(const char **tab);
 int		ft_export(char *env[]);
-=======
-int			ft_builtin_cmd(const char **tab);
-int			ft_cd(const char *path);
-int			ft_pwd(char *tab);
-int			ft_echo(const char **tab);
+int		ft_builtin_cmd(const char **tab);
+int		ft_cd(const char *path);
+int		ft_pwd(char *tab);
+int		ft_echo(const char **tab);
 
 /***************** TREE MANIPULATION ****************/
 
-void		ft_nodeiter(t_node *node, void (*f)(t_node *));
-void		ft_print_node(t_node *node);
-void		ft_print_tree(t_node *node);
-t_node		*ft_create_node(char *str);
+void	ft_nodeiter(t_node *node, void (*f)(t_node *));
+void	ft_print_node(t_node *node);
+void	ft_print_tree(t_node *node);
+void	ft_free_tree(t_node *root);
+t_node	*ft_create_node(char *str);
 
-void		ft_branching(t_node *node);
-t_node		*ft_create_tree(char *str);
->>>>>>> e1141fcbd19aef64ff1fd923173528aab63da191
+void	ft_branching(t_node *node);
+t_node	*ft_create_tree(char *str);
 
 #endif
