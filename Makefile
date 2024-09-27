@@ -2,6 +2,7 @@ CC = cc
 LIBFT = ../libft
 FLAGS = -Wall -Wextra -Werror -g
 NAME = minishell
+SUPPRESSION_FILE = readline.supp
 
 SRC = main.c \
 	  ft_free_tab.c \
@@ -35,12 +36,19 @@ $(NAME) : $(OBJ)
 	@make bonus -C libft/
 	cd obj && $(CC) $(FLAGS) $(OBJ) -o ../$(NAME) -lreadline -L$(LIBFT) -lft
 
+$(SUPPRESSION_FILE) :
+	@echo "{\n\tleak readline\n\tMemcheck:Leak\n\t...\n\tfun:readline\n}" > $(SUPPRESSION_FILE)
+	@echo "{\n\tleak add_history\n\tMemcheck:Leak\n\t...\n\tfun:add_history\n}" >> $(SUPPRESSION_FILE)
+
+valgrind : $(NAME) $(SUPPRESSION_FILE)
+	valgrind --suppressions=$(SUPPRESSION_FILE) --leak-check=full --show-leak-kinds=all ./$(NAME)
+
 clean :
 	@rm -rf obj
 	@make clean -C libft/
 
 fclean : clean
-	@rm -f $(NAME)
+	@rm -f $(NAME) $(SUPPRESSION_FILE)
 	@make fclean -C libft/
 
 list :
