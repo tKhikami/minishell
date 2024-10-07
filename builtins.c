@@ -6,7 +6,7 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 13:08:30 by atolojan          #+#    #+#             */
-/*   Updated: 2024/09/27 17:07:56 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/10/07 09:03:41 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_list	*env_to_tlist(char *env[])
 	return (envp);
 }
 
-int	ft_env(char *env[])
+int	ft_env(t_list *envp)
 {
 	ft_lstiter(envp, print_content);
 	ft_lstclear(&envp, free);
