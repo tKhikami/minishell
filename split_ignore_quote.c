@@ -6,11 +6,11 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 08:36:07 by atolojan          #+#    #+#             */
-/*   Updated: 2024/10/07 12:28:00 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/10/08 11:31:59 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
 static char	**check_malloc(char **tab, int i)
 {
@@ -36,7 +36,7 @@ static void	take_word(char **tab, const char *s, char c)
 		if (s[i] != c)
 		{
 			count = 0;
-			while (s[i] != '\0' && s[i] != c && ft_is_inner_quote(s, &s[i]))
+			while (s[i] != '\0' && s[i] != c && ft_is_inner_quote((char *)s, (char *)&s[i]))
 			{
 				count++;
 				i++;

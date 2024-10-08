@@ -57,7 +57,7 @@ int	ft_exit(const char **tab)
 int ft_builtin_cmd(const char **tab)
 {
 	if (tab != NULL)
-	{	
+	{
 		if (ft_memcmp(tab[0], "echo", 5) == 0)
 			return (ft_echo(tab));
 		else if (ft_memcmp(tab[0], "exit", 5) == 0)
