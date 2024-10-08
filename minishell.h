@@ -53,6 +53,8 @@ int		ft_is_inner_quote(char *str, char *to_compare);
 void	ft_handle_signals(int sig);
 char	*ft_sub_chainechr(char *s1, char *s2);
 char	*ft_reverse_strtok(char *str, char *delims, int (*ignore)(char *, char *));
+int		check_builtins(char *str);
+char	**split_ignore_quote(char const *s, char c);
 
 /******************* BUILTIN COMMAD *****************/
 
