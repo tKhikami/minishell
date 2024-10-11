@@ -36,11 +36,19 @@ typedef enum	e_status
 	undefine
 }	t_status;
 
+<<<<<<< HEAD
 typedef struct	s_token
 {
 	char		*tok;
 	t_status	type;
 }	t_token;
+=======
+typedef struct	s_assign
+{
+	char	*var_name;
+	char	*value;
+}			t_assign;
+>>>>>>> atolojan
 
 typedef struct	s_node
 {
@@ -58,12 +66,14 @@ int		ft_is_inner_quote(char *str, char *to_compare);
 void	ft_handle_signals(int sig);
 char	*ft_sub_chainechr(char *s1, char *s2);
 char	*ft_reverse_strtok(char *str, char *delims, int (*ignore)(char *, char *));
-int		check_builtins(char *str);
+int		check_builtins(char *str, t_list *envp);
 char	**split_ignore_quote(char const *s, char c);
+t_list	*env_to_tlist(char *env[]);
+int		is_an_assignment(char *str);
 
 /******************* BUILTIN COMMAD *****************/
 
-int		ft_builtin_cmd(const char **tab);
+int		ft_builtin_cmd(const char **tab, t_list *envp);
 int		ft_cd(const char *path);
 int		ft_pwd(char *tab);
 int		ft_echo(const char **tab);
