@@ -54,7 +54,7 @@ int	ft_exit(const char **tab)
 	exit(0);
 }
 
-int ft_builtin_cmd(const char **tab)
+int ft_builtin_cmd(const char **tab, t_list *envp)
 {
 	if (tab != NULL)
 	{
@@ -66,6 +66,10 @@ int ft_builtin_cmd(const char **tab)
 			return (ft_cd((const char *)tab[1]));
 		else if (ft_memcmp(tab[0], "pwd", 4) == 0)
 			return (ft_pwd((char *)tab[1]));
+		/*else if (ft_memcmp(tab[0], "export", 7) == 0)
+			return (ft_export((char *)tab[1], envp));
+*/		else if (ft_memcmp(tab[0], "env", 4) == 0)
+			return (ft_env(envp));
 	}
 	return (-1);
 }
