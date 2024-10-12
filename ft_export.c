@@ -6,7 +6,7 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 08:45:47 by atolojan          #+#    #+#             */
-/*   Updated: 2024/10/11 15:15:58 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/10/12 10:55:30 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,13 @@ t_assign	*char_to_assign(char *str)
 	return (assign);
 }
 
-t_list	*env_to_tlist(char *env[])
+t_list	*env_to_tlist(t_list *envp, char *env[])
 {
 	int			i;
-	t_list		*envp;
 	t_assign	*var;
 	char		*content;
 
 	i = 0;
-	envp = NULL;
 	content = NULL;
 	while (env[i] != NULL)
 	{
@@ -93,14 +91,31 @@ int	is_an_assignment(char *str)
 	}
 	return (1);
 }
+/*
+void	handle_export(t_list *envp, t_list *export, char **s, int i)
+{
+	int	a;
+
+	a = 1;
+	if (export)
+	{
+		ft_lstclear(&export, free);
+		export = NULL;
+	}
+	while (s[i + a] != '\0' && is_an_assignment(s[i + a]))
+	{
+		
 
 int	ft_export(char *str, char *env[])
 {
 	t_list	*envp;
 	t_list	*export;
 	char	**str_splitted;
+	int		i;
 
-	envp = env_to_tlist(env);
+	envp = NULL;
+	export = NULL;
+	env_to_tlist(envp, env);
 	if (!envp)
 		return (0);
 	str_splitted = ft_split(str, 32);
@@ -114,5 +129,9 @@ int	ft_export(char *str, char *env[])
 	{
 		if (!ft_strncmp((const char *)str_splitted[i], "export", 7))
 			handle_export(envp, export, str_splitted, i);
+		else if (is_an_assignment(str_splitted[i]))
+			env_to_tlist(export, &str_splitted[i]);
+		i++;
 	}
-}
+	return (1);
+}*/

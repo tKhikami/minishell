@@ -68,7 +68,7 @@ char	*ft_sub_chainechr(char *s1, char *s2);
 char	*ft_reverse_strtok(char *str, char *delims, int (*ignore)(char *, char *));
 int		check_builtins(char *str, t_list *envp);
 char	**split_ignore_quote(char const *s, char c);
-t_list	*env_to_tlist(char *env[]);
+t_list	*env_to_tlist(t_list *envp, char *env[]);
 int		is_an_assignment(char *str);
 
 /******************* BUILTIN COMMAD *****************/
