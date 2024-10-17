@@ -6,7 +6,7 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 13:08:30 by atolojan          #+#    #+#             */
-/*   Updated: 2024/10/11 10:21:33 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/10/17 12:12:28 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,25 @@ void	print_content(void *content)
 	printf("%s\n", (char *) content);
 }
 
-int	ft_env(t_list *envp)
+int	ft_env(t_list *envp, t_list *exp)
 {
-	ft_lstiter(envp, print_content);
-	ft_lstclear(&envp, free);
+	t_list *tmp;
+
+	tmp = envp;
+	while (tmp != NULL)
+	{
+		t_assign *ass = (t_assign *)(tmp->content);
+		printf("key : %s, value : %s\n", ass->var_name, ass->value);
+		tmp = tmp->next;
+	}
+	//(void)exp;
+	tmp = exp;
+	while (tmp != NULL)
+	{
+		t_assign *ass = (t_assign *)(tmp->content);
+		printf("key : %s, value : %s\n", ass->var_name, ass->value);
+		tmp = tmp->next;
+	}
+	tmp = NULL;
 	return (0);
 }

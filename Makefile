@@ -20,7 +20,8 @@ SRC = main.c \
 	  ft_free_tree.c \
 	  check_builtins.c \
 	  split_ignore_quote.c \
-	  ft_export.c
+	  ft_export.c \
+	  ft_unset.c \
 
 OBJ = $(SRC:.c=.o)
 

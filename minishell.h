@@ -36,19 +36,19 @@ typedef enum	e_status
 	undefine
 }	t_status;
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
 typedef struct	s_token
 {
 	char		*tok;
 	t_status	type;
 }	t_token;
-=======
+//=======
 typedef struct	s_assign
 {
 	char	*var_name;
 	char	*value;
 }			t_assign;
->>>>>>> atolojan
+//>>>>>>> atolojan
 
 typedef struct	s_node
 {
@@ -68,8 +68,10 @@ char	*ft_sub_chainechr(char *s1, char *s2);
 char	*ft_reverse_strtok(char *str, char *delims, int (*ignore)(char *, char *));
 int		check_builtins(char *str, t_list *envp);
 char	**split_ignore_quote(char const *s, char c);
-t_list	*env_to_tlist(t_list *envp, char *env[]);
+void	env_to_tlist(t_list **envp, char *env[], int count);
 int		is_an_assignment(char *str);
+void	print_content(void *content);
+void	handle_export(t_list **exp, char **s, int i, int history);
 
 /******************* BUILTIN COMMAD *****************/
 
@@ -77,11 +79,12 @@ int		ft_builtin_cmd(const char **tab, t_list *envp);
 int		ft_cd(const char *path);
 int		ft_pwd(char *tab);
 int		ft_echo(const char **tab);
-int		ft_export(char *str, t_list *envp);
-int		ft_env(t_list *envp);
+int		ft_export(t_list **exp, char *str);
+int		ft_env(t_list *envp, t_list *exp);
 int		ft_cd(const char *path);
 int		ft_pwd(char *tab);
 int		ft_echo(const char **tab);
+int		ft_unset(t_list *env, char *str);
 
 /***************** TREE MANIPULATION ****************/
 
