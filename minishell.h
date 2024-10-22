@@ -38,8 +38,9 @@ typedef enum	e_status
 
 typedef struct	s_token
 {
-	char		*tok;
-	t_status	type;
+	char			*tok;
+	t_status		type;
+	struct s_token	*next;
 }	t_token;
 
 typedef struct	s_node
@@ -55,9 +56,11 @@ void	ft_free_tab(char **split);
 int		ft_print_tab_char(const char **tab);
 int		ft_isnumber(const char *number);
 int		ft_is_inner_quote(char *str, char *to_compare);
+int		ft_is_in_set(char *set, char c);
 void	ft_handle_signals(int sig);
 char	*ft_sub_chainechr(char *s1, char *s2);
 char	*ft_reverse_strtok(char *str, char *delims, int (*ignore)(char *, char *));
+t_token	*ft_full_tokenization(char *str);
 
 /******************* BUILTIN COMMAD *****************/
 
@@ -77,7 +80,6 @@ void	ft_print_node(t_node *node);
 void	ft_print_tree(t_node *node);
 void	ft_free_tree(t_node *root);
 t_node	*ft_create_node(char *str);
-
 void	ft_branching(t_node *node);
 t_node	*ft_create_tree(char *str);
 

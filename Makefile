@@ -17,7 +17,9 @@ SRC = main.c \
 	  ft_nodeiter.c \
 	  ft_create_tree.c \
 	  ft_is_inner_quote.c \
-	  ft_free_tree.c
+	  ft_free_tree.c \
+	  ft_is_in_set.c \
+	  ft_tokenization.c
 
 OBJ = $(SRC:.c=.o)
 
