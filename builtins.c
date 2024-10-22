@@ -6,7 +6,7 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 13:08:30 by atolojan          #+#    #+#             */
-/*   Updated: 2024/09/26 10:07:50 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/10/17 12:12:28 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,27 +39,25 @@ void	print_content(void *content)
 	printf("%s\n", (char *) content);
 }
 
-int	ft_export(char *env[])
+int	ft_env(t_list *envp, t_list *exp)
 {
-	int	i;
-	t_list	*envp;
-	char	*content;
+	t_list *tmp;
 
-	i = 0;
-	envp = NULL;
-	content = NULL;
-	while (env[i] != NULL)
+	tmp = envp;
+	while (tmp != NULL)
 	{
-		content = ft_strdup(env[i]);
-		if (!content)
-		{
-			ft_lstclear(&envp, free);
-			return (-1);
-		}
-		ft_lstadd_back(&envp, ft_lstnew(content));
-		i++;
+		t_assign *ass = (t_assign *)(tmp->content);
+		printf("key : %s, value : %s\n", ass->var_name, ass->value);
+		tmp = tmp->next;
 	}
-	ft_lstiter(envp, print_content);
-	ft_lstclear(&envp, free);
+	//(void)exp;
+	tmp = exp;
+	while (tmp != NULL)
+	{
+		t_assign *ass = (t_assign *)(tmp->content);
+		printf("key : %s, value : %s\n", ass->var_name, ass->value);
+		tmp = tmp->next;
+	}
+	tmp = NULL;
 	return (0);
 }
