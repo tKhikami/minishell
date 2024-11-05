@@ -124,7 +124,7 @@ void	ft_get_line(int *exit_status, char *env[])
 	env_to_tlist(&envp, env, -1);
 	while (1)
 	{
-		str = readline("$>");
+		str = readline("$~>");
 		if (str != NULL)
 		{
 			/*add_history(str);
@@ -138,11 +138,13 @@ void	ft_get_line(int *exit_status, char *env[])
 				tok = ft_tokenization(NULL);
 			}*/
 			add_history(str);
-			ft_export(&exp, str);
-			if (!exp)
+			ft_export(&envp, str);
+			//ft_env(envp, 1);
+			if (!envp)
 				printf("ici\n");
-			ft_env(envp, exp);
-			printf("unset : %d\n", ft_unset(exp, str));
+			//t_assign *ass = (t_assign *)envp->content;
+			printf("unset done : %d\n", ft_unset(&envp, "PATH"));
+			//ft_env(envp, 0);
 			free(str);
 		}
 		else

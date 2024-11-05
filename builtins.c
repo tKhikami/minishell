@@ -6,7 +6,7 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 13:08:30 by atolojan          #+#    #+#             */
-/*   Updated: 2024/10/17 12:12:28 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/11/04 12:52:10 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,136 @@ void	print_content(void *content)
 	printf("%s\n", (char *) content);
 }
 
-int	ft_env(t_list *envp, t_list *exp)
+void	sort_list(t_list **sorted)
 {
-	t_list *tmp;
+	t_list	*i;
+	t_list	*j;
+	t_list	*min_idx;
+	char	*tmp;
+
+	if (*sorted == NULL || (*sorted)->next == NULL)
+		return ;
+	i = *sorted;
+	while (i->next != NULL)
+	{
+		min_idx = i;
+		j = i->next;
+		while (j)
+		{
+			if (ft_strcmp(j->content, min_idx->content) < 0)
+				min_idx = j;
+			j = j->next;
+		}
+		if (min_idx != i)
+		{
+			tmp = min_idx->content;
+			min_idx->content = i->content;
+			i->content = tmp;
+		}
+		i = i->next;
+	}
+}
+		
+t_list	*make_sort_list(t_list **envp)
+{
+	t_list	*sorted;
+	t_list	*tmp;
+	char	*str;
+
+	sorted = NULL;
+	tmp = *envp;
+	while (tmp)
+	{
+		str = ft_strdup(tmp->content);
+		if (!str)
+		{
+			ft_lstclear(&sorted, free);
+			return (NULL);
+		}
+		ft_lstadd_back(&sorted, ft_lstnew(str));
+		tmp = tmp->next;
+	}
+	sort_list(&sorted);
+	return (sorted);
+}
+/*
+int	ft_env(t_list *envp, int sorted)
+{
+	t_list		*tmp;
+	t_list		*sort;
+	t_assign	*ass;
+
+	//tmp = NULL;
+	tmp = envp;
+	if (sorted == 0)
+	{
+		while (tmp != NULL)
+		{
+			ass = extract_assign((char *)tmp->content);
+			printf("%s=%s\n", ass->var_name, ass->value);
+			tmp = tmp->next;
+		}
+		free(ass->var_name);
+		free(ass->value);
+		free(ass);
+	}
+	else
+	{
+		//sort = NULL;
+		sort = make_sort_list(&envp);
+		tmp = sort;
+		while (tmp != NULL)
+		{
+			ass = extract_assign((char *)tmp->content);
+			printf("declare -x %s=\"%s\"\n", ass->var_name, ass->value);
+			tmp = tmp->next;
+		}*/
+		/*if (ass)
+		{
+			free(ass->var_name);
+			free(ass->value);
+			free(ass);
+		}*/
+		//ft_lstclear(&sort, free);
+/*	}
+	tmp = NULL;
+	return (0);
+}*/
+
+int	ft_env(t_list *envp, int sorted)
+{
+	t_list		*tmp;
+	t_list		*sort;
+	t_assign	*ass;
 
 	tmp = envp;
-	while (tmp != NULL)
+	if (sorted == 0)
 	{
-		t_assign *ass = (t_assign *)(tmp->content);
-		printf("key : %s, value : %s\n", ass->var_name, ass->value);
-		tmp = tmp->next;
+		while (tmp != NULL)
+		{
+			ass = extract_assign((char *)tmp->content);
+			printf("%s=%s\n", ass->var_name, ass->value);
+			free(ass->var_name);
+			free(ass->value);
+			free(ass);
+			tmp = tmp->next;
+		}
 	}
-	//(void)exp;
-	tmp = exp;
-	while (tmp != NULL)
+	else
 	{
-		t_assign *ass = (t_assign *)(tmp->content);
-		printf("key : %s, value : %s\n", ass->var_name, ass->value);
-		tmp = tmp->next;
+		sort = make_sort_list(&envp);
+		tmp = sort;
+		printf("tmp->content %s\n", (char *)tmp->content);
+		while (tmp != NULL)
+		{
+			ass = extract_assign((char *)tmp->content);
+			printf("declare -x %s=\"%s\"\n", ass->var_name, ass->value);
+			free(ass->var_name);
+			free(ass->value);
+			free(ass);
+			tmp = tmp->next;
+		}
+		ft_lstclear(&sort, free);
 	}
-	tmp = NULL;
 	return (0);
 }

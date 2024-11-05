@@ -6,7 +6,7 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 08:45:47 by atolojan          #+#    #+#             */
-/*   Updated: 2024/10/17 14:08:17 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/11/05 16:38:11 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ t_assign	*extract_assign(char *str)
 			free(s);
 			if (str[i + 1] != '\0')
 			{
+				if (str[i + 1] == '"')
+					i++;
 				s = get_var_name(assign, str, i + 1, ft_strlen(str) - (i + 1));
 				if (!s)
 				{
@@ -91,7 +93,7 @@ t_assign	*extract_assign(char *str)
 			free(assign);
 			return (NULL);
 		}
-		assign->value = NULL;
+		assign->value = ft_strdup("\0");
 	}
 	return (assign);
 }
@@ -99,21 +101,13 @@ t_assign	*extract_assign(char *str)
 void	env_to_tlist(t_list **envp, char *env[], int count)
 {
 	int			i;
-	t_assign	*var;
 
 	i = 0;
-	var = NULL;
 	while (env[i] != NULL && i != count)
 	{
 		if (is_an_assignment(env[i]))
 		{
-			var = extract_assign(env[i]);
-			if (!var)
-			{
-				ft_lstclear(envp, free);
-				return ;
-			}
-			ft_lstadd_back(envp, ft_lstnew(var));
+			ft_lstadd_back(envp, ft_lstnew(ft_strdup(env[i])));
 		}
 		i++;
 	}
@@ -144,23 +138,72 @@ int	is_an_assignment(char *str)
 	return (1);
 }
 
-void	handle_export(t_list **exp, char **s, int i, int history)
+char	*search_value(t_list *exp, char *str)
 {
-	int	a;
+	t_assign	*assign;
+	t_list		*tmp;
+	//char		*to_find;
+
+	tmp = exp;
+	while (tmp)
+	{
+		assign = extract_assign((char *)tmp->content);
+		if (!ft_memcmp(assign->var_name, str, ft_strlen(assign->var_name)))
+		{
+			//to_find = ft_strdup(assign->var_name);
+			free(assign->var_name);
+			free(assign->value);
+			free(assign);
+			return ((char *)tmp->content);
+		}
+		free(assign->var_name);
+		free(assign->value);
+		free(assign);
+		tmp = tmp->next;
+	}
+	tmp = NULL;
+	return (NULL);
+}
+
+int	export_position(char **str)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (str[i])
+		i++;
+	j = 0;
+	while (str[j] && ft_strncmp((const char *)str[j], "export", 7))
+		j++;
+	if (j != i)
+		return (j);
+	return (-1);
+}
+
+void	handle_export(t_list **exp, char **s, int i, t_list *tmp)
+{
+	int		a;
+	char	*to_find;
 
 	a = 1;
-	if (exp && i != 0 && !history)
-		ft_lstclear(exp, free);
 	while (s[i + a] != NULL)
 	{
-		if (is_an_assignment(s[i + a]))
+		to_find = search_value(tmp, s[i + a]);
+		if (to_find)
 		{
-			printf("si : %s\n", s[i + a]);
-			env_to_tlist(exp, &s[i + a], 1);
+			ft_unset(exp, s[i + a]);
+			env_to_tlist(exp, &to_find, 1);
 		}
+		else if (is_an_assignment(s[i + a]))
+			env_to_tlist(exp, &s[i + a], 1);
 		else
 			break ;
 		a++;
+	}
+	if (a == 1)
+	{
+		ft_env(*exp, 1);
 	}
 }
 
@@ -169,26 +212,27 @@ int	ft_export(t_list **exp, char *str)
 	static t_list	*tmp;
 	char			**str_splitted;
 	int				i;
-	static int		history;
+	int				export_pos;
 
 	str_splitted = ft_split(str, 32);
 	if (!str_splitted)
 		return (1);
 	i = 0;
-	while (str_splitted[i] != NULL)
+	export_pos = export_position(str_splitted);
+	if (export_pos == -1)
 	{
-		if (!ft_strncmp((const char *)str_splitted[i], "export", 7))
-		{
-			handle_export(exp, str_splitted, i, history);
-			history = 1;
-			return (0);
-		}
-		else if (is_an_assignment(str_splitted[i]))
+		while (str_splitted[i])
 		{
 			env_to_tlist(&tmp, &str_splitted[i], 1);
-			printf("ajouter\n");
+			i++;
 		}
-		i++;
+		return (0);
+	}
+	else
+	{
+		i = export_pos;
+		handle_export(exp, str_splitted, i, tmp);
+		return (0);
 	}
 	return (1);
 }
