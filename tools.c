@@ -27,24 +27,6 @@ int	ft_lstprint(t_list *lst, int (*format)(void *))
 	return (ret);
 }
 
-int	ft_strcmp(char *s1, char *s2)
-{
-	int	i;
-
-	i = 0;
-	if (s1 == s2)
-		return (0);
-	if (s1 == NULL || s2 == NULL)
-		return (42);
-	while (s1[i] != '\0' && s2[i] != '\0')
-	{
-		if (s1[i] != s2[i])
-			break ;
-		i++;
-	}
-	return (s1[i] - s2[i]);
-}
-
 int	ft_tablen(char **tab)
 {
 	int	i;

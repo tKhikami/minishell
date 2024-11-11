@@ -16,7 +16,6 @@ typedef struct  s_variable
 
 /******************* TOOLS ******************/
 
-int	ft_strcmp(char *s1, char *s2);
 int     ft_lstprint(t_list *lst, int (*format)(void *));
 int     ft_tablen(char **tab);
 int     ultimate_tablen(char **tab);
