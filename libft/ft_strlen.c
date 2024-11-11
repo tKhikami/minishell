@@ -6,7 +6,7 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 09:00:32 by atolojan          #+#    #+#             */
-/*   Updated: 2024/08/01 09:03:50 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/11/11 07:24:21 by nyrandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@ size_t	ft_strlen(const char *s)
 	size_t	i;
 
 	i = 0;
-	while (s[i] != '\0')
-		i++;
+	if (s != NULL)
+	{
+		while (s[i] != '\0')
+			i++;
+	}
 	return (i);
 }

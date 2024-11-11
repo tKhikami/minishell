@@ -6,7 +6,7 @@ SUPPRESSION_FILE = readline.supp
 
 SRC = main.c \
 	  ft_free_tab.c \
-	  ft_print_tab_char.c \
+	  ft_print_tab.c \
 	  ft_builtin_cmd.c \
 	  ft_handle_signals.c \
 	  ft_isnumber.c \
@@ -21,9 +21,18 @@ SRC = main.c \
 	  ft_is_in_set.c \
 	  ft_tokenization.c \
 	  check_builtins.c \
+	  ft_split_ignore_quote.c \
 	  split_ignore_quote.c \
 	  ft_export.c \
 	  ft_unset.c \
+	  get_argument.c \
+	  ft_is_whitespace.c \
+	  get_line.c \
+	  dollar.c \
+	  environment.c \
+	  separation.c \
+	  tools.c \
+	  execution.c
 
 OBJ = $(SRC:.c=.o)
 

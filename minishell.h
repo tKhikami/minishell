@@ -36,20 +36,18 @@ typedef enum	e_status
 	undefine
 }	t_status;
 
-//<<<<<<< HEAD
 typedef struct	s_token
 {
 	char			*tok;
 	t_status		type;
 	struct s_token	*next;
 }	t_token;
-//=======
+
 typedef struct	s_assign
 {
 	char	*var_name;
 	char	*value;
 }			t_assign;
-//>>>>>>> atolojan
 
 typedef struct	s_node
 {
@@ -61,7 +59,7 @@ typedef struct	s_node
 /************************ TOOLS *********************/
 
 void	ft_free_tab(char **split);
-int		ft_print_tab_char(const char **tab);
+int		ft_print_tab(const char **tab);
 int		ft_isnumber(const char *number);
 int		ft_is_inner_quote(char *str, char *to_compare);
 int		ft_is_in_set(char *set, char c);
@@ -70,10 +68,14 @@ char	*ft_sub_chainechr(char *s1, char *s2);
 char	*ft_reverse_strtok(char *str, char *delims, int (*ignore)(char *, char *));
 t_token	*ft_full_tokenization(char *str);
 int		check_builtins(char *str, t_list *envp);
+char	**ft_lsttotab(t_list *lst);
+void	ft_lstfree(t_list **lst);
+char	**ft_split_ignore_quote(char *str, char c);
 char	**split_ignore_quote(char const *s, char c);
 void	env_to_tlist(t_list **envp, char *env[], int count);
 int		is_an_assignment(char *str);
 void	print_content(void *content);
+int		ft_is_whitespace(char c);
 void	handle_export(t_list **exp, char **s, int i);
 char	*search_value(t_list *exp, char *str);
 t_assign	*extract_assign(char *str);
@@ -101,5 +103,14 @@ void	ft_free_tree(t_node *root);
 t_node	*ft_create_node(char *str);
 void	ft_branching(t_node *node);
 t_node	*ft_create_tree(char *str);
+
+/****************** EXEC FUNCTION *******************/
+
+char	**get_argument(t_token *tok, t_list *env);
+char    *get_variable(char *str, t_list *env);
+
+/********************  KERNEL  **********************/
+
+void	get_line(int *exit_status, char *env[]);
 
 #endif

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*																			  */
 /*														  :::	   ::::::::   */
-/*	 ft_print_tab_char.c								:+:		 :+:	:+:   */
+/*	 ft_print_tab.c								:+:		 :+:	:+:   */
 /*													  +:+ +:+		  +:+	  */
 /*	 By: nyrandri <nyrandri@student.42antanana		+#+  +:+	   +#+		  */
 /*												  +#+#+#+#+#+	+#+			  */
@@ -12,22 +12,23 @@
 
 #include "minishell.h"
 
-int ft_print_tab_char(const char **tab)
+int ft_print_tab(const char **tab)
 {
 	int i;
 	int length;
 
 	i = 1;
 	length = 0;
-	if (tab[0] != NULL)
+	if (tab != NULL && tab[0] != NULL)
 	{	
 		length += write(1, tab[0], ft_strlen(tab[0]));
+		write(1, "\n", 1);
 		while (tab[i] != NULL)
 		{
-			length += write(1, " ", 1); 
 			length += write(1, tab[i], ft_strlen(tab[i]));
+			write(1, "\n", 1);
 			i++;
 		}
-	}	
+	}
 	return (length);
 }

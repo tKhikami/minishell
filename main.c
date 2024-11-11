@@ -5,69 +5,79 @@
 /*													  +:+ +:+		  +:+	  */
 /*	 By: nyrandri <nyrandri@student.42antanana		+#+  +:+	   +#+		  */
 /*												  +#+#+#+#+#+	+#+			  */
-/*	 Created: 2024/09/03 08:43:58 by nyrandri		   #+#	  #+#			  */
-/*	 Updated: 2024/09/04 08:31:49 by nyrandri		  ###	########.fr		  */
+/*	 Created: 2024/11/11 07:04:42 by nyrandri		   #+#	  #+#			  */
+/*	 Updated: 2024/11/11 12:22:37 by nyrandri		  ###	########.fr		  */
 /*																			  */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "header.h"
 
-void	ft_get_line(int *exit_status, char *env[])
+char	*ft_strtok(char *str, int c)
 {
-	char	*str;
-	t_node	*root;
-	t_list	*envp;
-	static t_list	*exp;
+	static char *ptr;
+	char		*ret;
+	int			i;
 
-	(void)exit_status;
-	(void)root;
-	//exp = NULL;
-	envp = NULL;
-	env_to_tlist(&envp, env, -1);
-	while (1)
+	i = 0;
+	if (str != NULL)
+		ptr = str;
+	if (ptr == NULL || ptr[0] == '\0')
+		return (NULL);
+	ret = ptr;
+	while (ptr[i] != c && ptr[i] != '\0')
+		i++;
+	while  (ptr[i] == c)
 	{
-		str = readline("$~>");
-		if (str != NULL)
+		if (ptr[i] == '\0')
 		{
-			add_history(str);
-//<<<<<<< HEAD
-			ft_export(&envp, str);
-			//ft_env(envp, 1);
-			if (!envp)
-				printf("ici\n");
-			//t_assign *ass = (t_assign *)envp->content;
-			printf("unset done : %d\n", ft_unset(&envp, "PATH"));
-			//ft_env(envp, 0);
-//=======
-			//tok = ft_full_tokenization(str);
-//>>>>>>> d0cce1c8df4c18691fc06f3cec791c7e5ebd140f
-			free(str);
+			ptr = NULL;
+			return (ret);
 		}
-		else
-		{
-			rl_clear_history();
-			ft_printf("exit\n");
-			ft_lstclear(&envp, free);
-			ft_lstclear(&exp, free);
-			free(str);
-			return ;
-		}
+		ptr[i] = '\0';
+		i++;
 	}
-	return ;
+	ptr = ptr + i;
+	return (ret);
+}
+		
+
+char	*path_exist(char *executable, t_list *env)
+{
+	char	path[1024];
+	t_list	*tmp;
+	char	*value;
+	char	*ptr;
+	char	buffer[300];
+
+	tmp = variable_chr(env, "PATH");
+	value = ((t_variable *)tmp->content)->value;
+	ft_strlcpy(path, value, ft_strlen(value) + 1);
+	ptr = ft_strtok(path, ':');
+	while (ptr != NULL)
+	{
+		ft_strlcpy(buffer, ptr, ft_strlen(value) + 1);
+		ft_strlcat(buffer, "/", ft_strlen(value) + 2);
+		ft_strlcat(buffer, executable, ft_strlen(executable) + ft_strlen(buffer) + 2);
+		ptr = path_valid(buffer);
+		if (ptr == NULL)
+			ptr = ft_strtok(NULL, ':');
+		else
+			return (ft_strdup(buffer));
+	}
+	return (ptr);
 }
 
-int	main(int n, char *arg[], char *env[])
+int	main(int n, char *vector[], char *envp[])
 {
-	int	exit_status;
+	if (n <= 1)
+		return (0);
+	t_list	*env = get_all_variable(envp);
+	char *str = path_exist(vector[1], env);
+	if (str == NULL)
+		printf("%s n'existe pas\n", str);
+	else
+		printf("%s existe\n", str);
+	free(str);
 
-	exit_status = 0;
-	(void)arg;
-	if (n == 1)
-	{
-		signal(SIGINT, ft_handle_signals);
-		signal(SIGQUIT, ft_handle_signals);
-		ft_get_line(&exit_status, env);
-		//printf("iaa %d\n", is_an_assignment("kejrhjke"));
-	}
-	return (exit_status);
+	return (0);
 }
