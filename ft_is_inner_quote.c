@@ -18,17 +18,18 @@ int ft_is_inner_quote(char *str, char *to_compare)
 	char	*open;
 	char	*close;
 
-	i = 0;
 	open = str;
-	close = str;
+	close = str - 1;
 	if (str == NULL)
 		return (0);
 	while (close < to_compare)
-	{	
+	{
+		i = 0;
+		open = close + 1;
 		while (open[i] != '\"' && open[i] != '\'' && open[i] != '\0')
 			i++;
 		open = &open[i];
-		if (close[0] == '\0')
+		if (open > to_compare)
 			break ;
 		close = &open[1];
 		while (close[0] != open[0] && close[0] != '\0')

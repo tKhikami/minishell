@@ -23,11 +23,11 @@ int ft_echo(const char **tab)
 	{
 		if (ft_memcmp(tab[1], "-n", 3) == 0)
 		{	
-			length += ft_print_tab_char(&tab[2]);
+			length += ft_print_tab(&tab[2]);
 		}
 		else
 		{
-			length += ft_print_tab_char(&tab[1]);
+			length += ft_print_tab(&tab[1]);
 			length += write(1, "\n", 1);
 		}
 	}
