@@ -75,8 +75,11 @@ char	**split_ignore_quote(char const *s, char c);
 void	env_to_tlist(t_list **envp, char *env[], int count);
 int		is_an_assignment(char *str);
 void	print_content(void *content);
-void	handle_export(t_list **exp, char **s, int i, int history);
 int		ft_is_whitespace(char c);
+void	handle_export(t_list **exp, char **s, int i);
+char	*search_value(t_list *exp, char *str);
+t_assign	*extract_assign(char *str);
+void	remove_assign(t_assign *assign);
 
 /******************* BUILTIN COMMAD *****************/
 
@@ -85,11 +88,11 @@ int		ft_cd(const char *path);
 int		ft_pwd(char *tab);
 int		ft_echo(const char **tab);
 int		ft_export(t_list **exp, char *str);
-int		ft_env(t_list *envp, t_list *exp);
+int		ft_env(t_list *envp, int sorted);
 int		ft_cd(const char *path);
 int		ft_pwd(char *tab);
 int		ft_echo(const char **tab);
-int		ft_unset(t_list *env, char *str);
+int		ft_unset(t_list **env, char *str);
 
 /***************** TREE MANIPULATION ****************/
 
