@@ -30,7 +30,7 @@ void	ft_get_line(int *exit_status, char *env[])
 		if (str != NULL)
 		{
 			add_history(str);
-<<<<<<< HEAD
+//<<<<<<< HEAD
 			ft_export(&envp, str);
 			//ft_env(envp, 1);
 			if (!envp)
@@ -38,9 +38,9 @@ void	ft_get_line(int *exit_status, char *env[])
 			//t_assign *ass = (t_assign *)envp->content;
 			printf("unset done : %d\n", ft_unset(&envp, "PATH"));
 			//ft_env(envp, 0);
-=======
-			tok = ft_full_tokenization(str);
->>>>>>> d0cce1c8df4c18691fc06f3cec791c7e5ebd140f
+//=======
+			//tok = ft_full_tokenization(str);
+//>>>>>>> d0cce1c8df4c18691fc06f3cec791c7e5ebd140f
 			free(str);
 		}
 		else

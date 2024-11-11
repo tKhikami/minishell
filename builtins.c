@@ -6,7 +6,7 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 13:08:30 by atolojan          #+#    #+#             */
-/*   Updated: 2024/11/04 12:52:10 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/11/07 16:44:40 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,49 +91,6 @@ t_list	*make_sort_list(t_list **envp)
 	sort_list(&sorted);
 	return (sorted);
 }
-/*
-int	ft_env(t_list *envp, int sorted)
-{
-	t_list		*tmp;
-	t_list		*sort;
-	t_assign	*ass;
-
-	//tmp = NULL;
-	tmp = envp;
-	if (sorted == 0)
-	{
-		while (tmp != NULL)
-		{
-			ass = extract_assign((char *)tmp->content);
-			printf("%s=%s\n", ass->var_name, ass->value);
-			tmp = tmp->next;
-		}
-		free(ass->var_name);
-		free(ass->value);
-		free(ass);
-	}
-	else
-	{
-		//sort = NULL;
-		sort = make_sort_list(&envp);
-		tmp = sort;
-		while (tmp != NULL)
-		{
-			ass = extract_assign((char *)tmp->content);
-			printf("declare -x %s=\"%s\"\n", ass->var_name, ass->value);
-			tmp = tmp->next;
-		}*/
-		/*if (ass)
-		{
-			free(ass->var_name);
-			free(ass->value);
-			free(ass);
-		}*/
-		//ft_lstclear(&sort, free);
-/*	}
-	tmp = NULL;
-	return (0);
-}*/
 
 int	ft_env(t_list *envp, int sorted)
 {
@@ -148,9 +105,7 @@ int	ft_env(t_list *envp, int sorted)
 		{
 			ass = extract_assign((char *)tmp->content);
 			printf("%s=%s\n", ass->var_name, ass->value);
-			free(ass->var_name);
-			free(ass->value);
-			free(ass);
+			remove_assign(ass);
 			tmp = tmp->next;
 		}
 	}
@@ -158,14 +113,16 @@ int	ft_env(t_list *envp, int sorted)
 	{
 		sort = make_sort_list(&envp);
 		tmp = sort;
-		printf("tmp->content %s\n", (char *)tmp->content);
 		while (tmp != NULL)
 		{
 			ass = extract_assign((char *)tmp->content);
-			printf("declare -x %s=\"%s\"\n", ass->var_name, ass->value);
-			free(ass->var_name);
-			free(ass->value);
-			free(ass);
+			if (ass->value == NULL)
+				printf("declare -x %s\n", ass->var_name);
+			else if ((ass->value)[0] == '"')
+				printf("declare -x %s=%s\n", ass->var_name, ass->value);
+			else
+				printf("declare -x %s=\"%s\"\n", ass->var_name, ass->value);
+			remove_assign(ass);
 			tmp = tmp->next;
 		}
 		ft_lstclear(&sort, free);

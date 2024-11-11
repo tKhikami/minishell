@@ -6,7 +6,7 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 08:45:47 by atolojan          #+#    #+#             */
-/*   Updated: 2024/11/05 16:38:11 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/11/11 08:27:02 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_assign	*extract_assign(char *str)
 {
 	t_assign	*assign;
 	char		*s;
-	size_t		i;
+	int		i;
 	int			equal;
 
 	equal = 0;
@@ -53,8 +53,6 @@ t_assign	*extract_assign(char *str)
 			free(s);
 			if (str[i + 1] != '\0')
 			{
-				if (str[i + 1] == '"')
-					i++;
 				s = get_var_name(assign, str, i + 1, ft_strlen(str) - (i + 1));
 				if (!s)
 				{
@@ -93,7 +91,7 @@ t_assign	*extract_assign(char *str)
 			free(assign);
 			return (NULL);
 		}
-		assign->value = ft_strdup("\0");
+		assign->value = NULL;
 	}
 	return (assign);
 }
@@ -131,8 +129,8 @@ int	is_an_assignment(char *str)
 				return (0);
 			after_equal = 1;
 		}
-		else if (!ft_isalnum(str[i]) && str[i] != '_' && !after_equal)
-			return (0);
+		//else if (!ft_isalnum(str[i]) && str[i] != '_' && !after_equal)
+		//	return (0);
 		i++;
 	}
 	return (1);
@@ -142,7 +140,7 @@ char	*search_value(t_list *exp, char *str)
 {
 	t_assign	*assign;
 	t_list		*tmp;
-	//char		*to_find;
+	char		*to_find;
 
 	tmp = exp;
 	while (tmp)
@@ -150,89 +148,60 @@ char	*search_value(t_list *exp, char *str)
 		assign = extract_assign((char *)tmp->content);
 		if (!ft_memcmp(assign->var_name, str, ft_strlen(assign->var_name)))
 		{
-			//to_find = ft_strdup(assign->var_name);
-			free(assign->var_name);
-			free(assign->value);
-			free(assign);
-			return ((char *)tmp->content);
+			to_find = ft_strdup(assign->var_name);
+			remove_assign(assign);
+			return (to_find);
 		}
-		free(assign->var_name);
-		free(assign->value);
-		free(assign);
+		remove_assign(assign);
 		tmp = tmp->next;
 	}
 	tmp = NULL;
 	return (NULL);
 }
 
-int	export_position(char **str)
+void	handle_export(t_list **exp, char **s, int i)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	while (str[i])
-		i++;
-	j = 0;
-	while (str[j] && ft_strncmp((const char *)str[j], "export", 7))
-		j++;
-	if (j != i)
-		return (j);
-	return (-1);
-}
-
-void	handle_export(t_list **exp, char **s, int i, t_list *tmp)
-{
-	int		a;
-	char	*to_find;
+	int			a;
+	char		*to_find;
+	t_assign	*ass;
 
 	a = 1;
 	while (s[i + a] != NULL)
 	{
-		to_find = search_value(tmp, s[i + a]);
+		to_find = search_value(*exp, s[i + a]);
 		if (to_find)
 		{
-			ft_unset(exp, s[i + a]);
-			env_to_tlist(exp, &to_find, 1);
+			ass = extract_assign(s[i + a]);
+			if (ass->value != NULL)
+			{
+				ft_unset(exp, ass->var_name);
+				env_to_tlist(exp, &s[i + a], 1);
+			}
+			else
+			{
+				remove_assign(ass);
+				return ;
+			}
+			remove_assign(ass);
 		}
-		else if (is_an_assignment(s[i + a]))
-			env_to_tlist(exp, &s[i + a], 1);
 		else
-			break ;
+		{
+			env_to_tlist(exp, &s[i + a], 1);
+			return ;
+		}
 		a++;
 	}
 	if (a == 1)
-	{
 		ft_env(*exp, 1);
-	}
 }
 
 int	ft_export(t_list **exp, char *str)
 {
-	static t_list	*tmp;
 	char			**str_splitted;
-	int				i;
-	int				export_pos;
 
 	str_splitted = ft_split(str, 32);
 	if (!str_splitted)
 		return (1);
-	i = 0;
-	export_pos = export_position(str_splitted);
-	if (export_pos == -1)
-	{
-		while (str_splitted[i])
-		{
-			env_to_tlist(&tmp, &str_splitted[i], 1);
-			i++;
-		}
-		return (0);
-	}
-	else
-	{
-		i = export_pos;
-		handle_export(exp, str_splitted, i, tmp);
-		return (0);
-	}
-	return (1);
+	handle_export(exp, str_splitted, 0);
+	return (0);
 }

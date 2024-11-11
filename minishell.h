@@ -74,9 +74,10 @@ char	**split_ignore_quote(char const *s, char c);
 void	env_to_tlist(t_list **envp, char *env[], int count);
 int		is_an_assignment(char *str);
 void	print_content(void *content);
-void	handle_export(t_list **exp, char **s, int i, t_list *tmp);
+void	handle_export(t_list **exp, char **s, int i);
 char	*search_value(t_list *exp, char *str);
 t_assign	*extract_assign(char *str);
+void	remove_assign(t_assign *assign);
 
 /******************* BUILTIN COMMAD *****************/
 
