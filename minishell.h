@@ -58,7 +58,6 @@ typedef struct	s_node
 
 /************************ TOOLS *********************/
 
-void	ft_free_tab(char **split);
 int		ft_print_tab(const char **tab);
 int		ft_isnumber(const char *number);
 int		ft_is_inner_quote(char *str, char *to_compare);
@@ -66,7 +65,7 @@ int		ft_is_in_set(char *set, char c);
 void	ft_handle_signals(int sig);
 char	*ft_sub_chainechr(char *s1, char *s2);
 char	*ft_reverse_strtok(char *str, char *delims, int (*ignore)(char *, char *));
-t_token	*ft_full_tokenization(char *str);
+t_token	*full_tokenization(char *str);
 int		check_builtins(char *str, t_list *envp);
 char	**ft_lsttotab(t_list *lst);
 void	ft_lstfree(t_list **lst);

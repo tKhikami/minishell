@@ -30,7 +30,7 @@ void	get_line(int *exit_status, char *env[])
 		if (str != NULL)
 		{
 			add_history(str);
-			tok = ft_full_tokenization(str);
+			tok = full_tokenization(str);
 			tab = get_argument(tok, envar);
 			ft_print_tab((const char **)tab);
 			free(str);

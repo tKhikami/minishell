@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*																			  */
-/*														  :::	   ::::::::   */
-/*	 ft_tokenization.c									:+:		 :+:	:+:   */
-/*													  +:+ +:+		  +:+	  */
-/*	 By: nyrandri <nyrandri@student.42antanana		+#+  +:+	   +#+		  */
-/*												  +#+#+#+#+#+	+#+			  */
-/*	 Created: 2024/10/07 10:13:34 by nyrandri		   #+#	  #+#			  */
-/*	 Updated: 2024/10/07 10:13:34 by nyrandri		  ###	########.fr		  */
-/*																			  */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenization.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/17 16:16:39 by nyrandri          #+#    #+#             */
+/*   Updated: 2024/11/17 16:23:08 by nyrandri         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
@@ -64,8 +64,8 @@ static void	move_cursor_to_the_first_set(char **cursor, char *set)
 	str = *cursor;
 	while (ft_is_in_set(" \t\n\v", *cursor[0]) != 0)
 		(*cursor)++;
-	while ((ft_is_in_set(set, *cursor[0]) == 0 && *cursor[0] != '\0') || \
-			ft_is_inner_quote(str, *cursor) == 1)
+	while ((ft_is_in_set(set, *cursor[0]) == 0 || \
+			ft_is_inner_quote(str, *cursor)) && *cursor[0] != '\0')
 		(*cursor)++;
 }
 
@@ -97,12 +97,14 @@ static t_token *ft_tokenization(char *str)
 	return (token);
 }
 
-t_token *ft_full_tokenization(char *str)
+t_token *full_tokenization(char *str)
 {
 	t_token *tok;
 	t_token *tmp;
 	t_token *prev;
 
+	if (str == NULL)
+		return (NULL);
 	ft_tokenization(str);
 	tmp = ft_tokenization(NULL);
 	tok = tmp;

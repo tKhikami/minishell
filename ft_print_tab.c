@@ -12,15 +12,15 @@
 
 #include "minishell.h"
 
-int ft_print_tab(const char **tab)
+int	ft_print_tab(const char **tab)
 {
-	int i;
-	int length;
+	int	i;
+	int	length;
 
 	i = 1;
 	length = 0;
 	if (tab != NULL && tab[0] != NULL)
-	{	
+	{
 		length += write(1, tab[0], ft_strlen(tab[0]));
 		write(1, "\n", 1);
 		while (tab[i] != NULL)

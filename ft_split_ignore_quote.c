@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_split_ignore_quote.c                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 09:53:11 by nyrandri          #+#    #+#             */
-/*   Updated: 2024/11/11 08:29:53 by nyrandri         ###   ########.fr       */
-/*                                                                            */
+/*																			  */
+/*														  :::	   ::::::::   */
+/*	 ft_split_ignore_quote.c							:+:		 :+:	:+:   */
+/*													  +:+ +:+		  +:+	  */
+/*	 By: nyrandri <nyrandri@student.42antanana		+#+  +:+	   +#+		  */
+/*												  +#+#+#+#+#+	+#+			  */
+/*	 Created: 2024/10/29 09:53:11 by nyrandri		   #+#	  #+#			  */
+/*	 Updated: 2024/11/17 14:17:33 by nyrandri		  ###	########.fr		  */
+/*																			  */
 /* ************************************************************************** */
 
 #include "minishell.h"
@@ -35,7 +35,7 @@ char	**ft_lsttotab(t_list *lst)
 	}
 	return (tab);
 }
-		
+
 void	ft_lstfree(t_list **lst)
 {
 	t_list	*tmp;
@@ -51,29 +51,41 @@ void	ft_lstfree(t_list **lst)
 	*lst = NULL;
 }
 
-char	**ft_split_ignore_quote(char *str, char c)
+static t_list	*mini_split(t_list *lstroot, char **start, char c)
 {
 	int		i;
+	char	*tmp;
+
+	i = 0;
+	while ((*start)[i] != '\0' && ((*start)[i] != c || \
+				ft_is_inner_quote(*start, &(*start)[i])))
+		i++;
+	tmp = ft_substr(*start, 0, i);
+	if (tmp == NULL)
+	{
+		ft_lstclear(&lstroot, free);
+		return (NULL);
+	}
+	ft_lstadd_back(&lstroot, ft_lstnew(tmp));
+	while ((*start)[i] == c)
+		i++;
+	*start = &(*start)[i];
+	return (lstroot);
+}
+
+char	**ft_split_ignore_quote(char *str, char c)
+{
 	char	*start;
 	char	**tab;
-	char	*tmp;
 	t_list	*lstroot;
 
 	lstroot = NULL;
-	i = 0;
 	start = str;
 	while (start[0] != '\0')
 	{
-		while (start[i] != '\0' && (start[i] != c || ft_is_inner_quote(str, &start[i])))
-			i++;
-		tmp = ft_substr(start, 0, i);
-		if (tmp == NULL)
+		lstroot = mini_split(lstroot, &start, c);
+		if (lstroot == NULL)
 			return (NULL);
-		ft_lstadd_back(&lstroot, ft_lstnew(tmp));
-		while (start[i] == c)
-			i++;
-		start = &start[i];
-		i = 0;
 	}
 	tab = ft_lsttotab(lstroot);
 	ft_lstfree(&lstroot);

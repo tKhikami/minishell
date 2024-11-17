@@ -1,18 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dollar.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/17 16:14:45 by nyrandri          #+#    #+#             */
+/*   Updated: 2024/11/17 16:16:04 by nyrandri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
 char	*fusion_tab(char **tab)
 {
-	int	ultimate_len;
+	int		ultimate_len;
 	char	*str;
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
 	ultimate_len = ultimate_tablen(tab);
 	if (ultimate_len == 0)
 		return (NULL);
-	str = malloc(ultimate_len + 1);
+	str = ft_calloc(ultimate_len + 1, 1);
 	if (str == NULL)
 		return (NULL);
 	while (tab[i] != NULL)
@@ -21,13 +33,13 @@ char	*fusion_tab(char **tab)
 		j += ft_strlen(tab[i]);
 		i++;
 	}
+	ft_tabfree(tab);
 	return (str);
 }
 
-
 t_list	*get_varname(char *str)
 {
-	int	i;
+	int		i;
 	char	*ptr;
 
 	i = 1;
@@ -43,7 +55,7 @@ t_list	*get_varname(char *str)
 t_list	*split_dollar(char *str)
 {
 	char	*ptr;
-	int	len;
+	int		len;
 	t_list	*lst;
 
 	if (str == NULL)
@@ -125,6 +137,7 @@ char	*change_dollar(t_list *env, char *str)
 	tab = ft_lsttotab(lst);
 	invert_tab(&tab);
 	ret = fusion_tab(tab);
+	ft_lstfree(&lst);
 	return (ret);
 }
 
@@ -132,7 +145,7 @@ char	*dollar_expand(t_list *env, char *str)
 {
 	char	*ret;
 	char	*tmp;
-	int	len;
+	int		len;
 
 	if (env == NULL || str == NULL)
 		return (NULL);
@@ -158,7 +171,7 @@ char	*dollar_expand(t_list *env, char *str)
 
 char	**ultimate_change_dollar(t_list *env, char **tab)
 {
-	int	i;
+	int		i;
 	char	*tmp;
 
 	i = 0;

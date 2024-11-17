@@ -15,7 +15,7 @@
 int	ft_lstprint(t_list *lst, int (*format)(void *))
 {
 	t_list	*tmp;
-	int	ret;
+	int		ret;
 
 	tmp = lst;
 	ret = 0;
@@ -60,7 +60,7 @@ int	ultimate_tablen(char **tab)
 
 t_list	*ft_tabtolst(char **tab)
 {
-	int	len;
+	int		len;
 	t_list	*lst;
 
 	if (tab == NULL)
@@ -77,8 +77,8 @@ t_list	*ft_tabtolst(char **tab)
 
 void	invert_tab(char ***tab)
 {
-	int	len;
-	int	i;
+	int		len;
+	int		i;
 	char	*tmp;
 
 	i = 0;
@@ -97,8 +97,8 @@ void	invert_tab(char ***tab)
 char	**ft_concatenate_tab(char **tab1, char **tab2)
 {
 	char	**ret;
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 
 	if (tab1 == NULL || tab2 == NULL)
 		return (NULL);
@@ -123,13 +123,59 @@ char	**ft_concatenate_tab(char **tab1, char **tab2)
 
 void	ft_tabfree(char **tab)
 {
-		int		i;
+	int	i;
 
-		i = 0;
-		while (tab[i] != NULL)
-		{
-				free(tab[i]);
-				i++;
-		}
-		free(tab);
+	i = 0;
+	while (tab[i] != NULL)
+	{
+		free(tab[i]);
+		tab[i] = NULL;
+		i++;
+	}
+	free(tab);
+	tab = NULL;
+}
+
+void	ft_lstinsert(t_list *lst, t_list *newlst)
+{
+	t_list	*tmp;
+	t_list	*last;
+
+	if (lst == NULL || newlst == NULL)
+		return ;
+	tmp = lst->next;
+	last = ft_lstlast(newlst);
+	lst->next = newlst;
+	last->next = tmp;
+}
+
+int	format_content_char(void *str)
+{
+	char	*tmp;
+
+	tmp = (char *)str;
+	if (tmp != NULL)
+	{
+		write(1, "\n", 1);
+		return (write(1, str, ft_strlen(tmp)));
+	}
+	return (write(1, "(null)", 6));
+}
+
+void	free_token(t_token *tok)
+{
+	if (tok != NULL)
+	{
+		free_token(tok->next);
+		free(tok);
+		tok = NULL;
+	}
+}
+
+void	free_variable(void *var)
+{
+	free(((t_variable *)var)->varname);
+	free(((t_variable *)var)->value);
+	free(var);
+	var = NULL;
 }
