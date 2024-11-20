@@ -86,20 +86,9 @@ char	*path_exist(char *exec, t_list *env)
 
 int	main(int n, char *vector[], char *envp[])
 {
-	//(void)vector;
-	//char string[15] = "ls < tet.txt";
 	if (n <= 1)
 		return (0);
-	//t_list	*env = get_all_variable(envp);
-	//char *str = path_exist(vector[1], env);
-	//char *args[] = {str, NULL};
-	//execve(str, args, envp);
 	check_redirections(vector[1], envp);
-	/*if (str == NULL)
-		printf("%s n'existe pas\n", str);
-	else
-		printf("%s existe\n", str);
-	free(str);*/
 >>>>>>> atolojan
 	return (0);
 }

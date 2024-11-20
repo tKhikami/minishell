@@ -6,15 +6,15 @@
 /*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:16:39 by nyrandri          #+#    #+#             */
-/*   Updated: 2024/11/17 16:23:08 by nyrandri         ###   ########.fr       */
+/*   Updated: 2024/11/20 09:17:53 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_token *ft_create_token(char *token, t_status type)
+static t_token	*ft_create_token(char *token, t_status type)
 {
-	t_token *value;
+	t_token	*value;
 
 	value = malloc(sizeof(t_token));
 	value->tok = token;
@@ -69,9 +69,9 @@ static void	move_cursor_to_the_first_set(char **cursor, char *set)
 		(*cursor)++;
 }
 
-static t_token *ft_tokenization(char *str)
+static t_token	*ft_tokenization(char *str)
 {
-	static char *tmp;
+	static char	*tmp;
 	t_token		*token;
 	static int	i;
 
@@ -97,11 +97,11 @@ static t_token *ft_tokenization(char *str)
 	return (token);
 }
 
-t_token *full_tokenization(char *str)
+t_token	*full_tokenization(char *str)
 {
-	t_token *tok;
-	t_token *tmp;
-	t_token *prev;
+	t_token	*tok;
+	t_token	*tmp;
+	t_token	*prev;
 
 	if (str == NULL)
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 17:11:25 by atolojan          #+#    #+#             */
-/*   Updated: 2024/11/07 16:44:50 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/11/20 09:01:02 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	ft_unset(t_list **env, char *str)
 			else
 				previous->next = tmp->next;
 			remove_assign(assign);
-            free(tmp);
+			free(tmp);
 			return (0);
 		}
 		remove_assign(assign);

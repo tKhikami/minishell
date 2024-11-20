@@ -10,16 +10,16 @@
 /*																			  */
 /* ************************************************************************** */
 
-int ft_is_in_set(char *set, char c)
+int	ft_is_in_set(char *set, char c)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (set[i] != '\0')
-	{	
+	{
 		if (set[i] == c)
 			return ((int)c);
 		i++;
-	}	
+	}
 	return (0);
 }

@@ -15,15 +15,12 @@
 void	get_line(int *exit_status, char *env[])
 {
 	char	*str;
-	t_token *tok;
-	char **tab;
+	char	**tab;
 	t_list	*envar;
+
 	envar = NULL;
 	(void)exit_status;
 	(void)env;
-	(void)tok;
-
-
 	while (1)
 	{
 		str = readline("$>");

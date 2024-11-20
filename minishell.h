@@ -5,7 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Updated: 2024/09/16 17:35:53 by nyrandri         ###   ########.fr       */
+/*   Created: 2024/11/20 09:01:48 by atolojan          #+#    #+#             */
+/*   Updated: 2024/11/20 09:05:44 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +67,7 @@ int		ft_is_inner_quote(char *str, char *to_compare);
 int		ft_is_in_set(char *set, char c);
 void	ft_handle_signals(int sig);
 char	*ft_sub_chainechr(char *s1, char *s2);
-char	*ft_reverse_strtok(char *str, char *delims, int (*ignore)(char *, char *));
+char	*ft_reverse_strtok(char *s, char *del, int (*ignore)(char *, char *));
 t_token	*full_tokenization(char *str);
 int		check_builtins(char *str, t_list *envp);
 char	**ft_lsttotab(t_list *lst);
@@ -109,7 +110,7 @@ t_node	*ft_create_tree(char *str);
 /****************** EXEC FUNCTION *******************/
 
 char	**get_argument(t_token *tok, t_list *env);
-char    *get_variable(char *str, t_list *env);
+char	*get_variable(char *str, t_list *env);
 void	check_redirections(char *str, char *envp[]);
 char	*path_exist(char *exec, t_list *env);
 
