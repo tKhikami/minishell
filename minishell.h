@@ -18,7 +18,9 @@
 # include <stdlib.h>
 # include <signal.h>
 # include <unistd.h>
+# include <fcntl.h>
 # include "libft/libft.h"
+# include <sys/wait.h>
 
 # define PIPE "|"
 # define NORMAL_INPUT "<"
@@ -79,6 +81,7 @@ void	handle_export(t_list **exp, char **s, int i);
 char	*search_value(t_list *exp, char *str);
 t_assign	*extract_assign(char *str);
 void	remove_assign(t_assign *assign);
+t_list	*get_all_variable(char **str);
 
 /******************* BUILTIN COMMAD *****************/
 
@@ -107,6 +110,8 @@ t_node	*ft_create_tree(char *str);
 
 char	**get_argument(t_token *tok, t_list *env);
 char    *get_variable(char *str, t_list *env);
+void	check_redirections(char *str, char *envp[]);
+char	*path_exist(char *exec, t_list *env);
 
 /********************  KERNEL  **********************/
 
