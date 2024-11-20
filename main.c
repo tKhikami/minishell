@@ -41,13 +41,13 @@ char	*ft_strtok(char *str, int c)
 }
 		
 
-char	*path_exist(char *executable, t_list *env)
+char	*path_exist(char *exec, t_list *env)
 {
 	char	path[1024];
 	t_list	*tmp;
 	char	*value;
 	char	*ptr;
-	char	buffer[300];
+	char	buf[300];
 
 	tmp = variable_chr(env, "PATH");
 	value = ((t_variable *)tmp->content)->value;
@@ -55,29 +55,33 @@ char	*path_exist(char *executable, t_list *env)
 	ptr = ft_strtok(path, ':');
 	while (ptr != NULL)
 	{
-		ft_strlcpy(buffer, ptr, ft_strlen(value) + 1);
-		ft_strlcat(buffer, "/", ft_strlen(value) + 2);
-		ft_strlcat(buffer, executable, ft_strlen(executable) + ft_strlen(buffer) + 2);
-		ptr = path_valid(buffer);
+		ft_strlcpy(buf, ptr, ft_strlen(value) + 1);
+		ft_strlcat(buf, "/", ft_strlen(value) + 2);
+		ft_strlcat(buf, exec, ft_strlen(exec) + ft_strlen(buf) + 2);
+		ptr = path_valid(buf);
 		if (ptr == NULL)
 			ptr = ft_strtok(NULL, ':');
 		else
-			return (ft_strdup(buffer));
+			return (ft_strdup(buf));
 	}
 	return (ptr);
 }
 
 int	main(int n, char *vector[], char *envp[])
 {
+	//(void)vector;
+	//char string[15] = "ls < tet.txt";
 	if (n <= 1)
 		return (0);
-	t_list	*env = get_all_variable(envp);
-	char *str = path_exist(vector[1], env);
-	if (str == NULL)
+	//t_list	*env = get_all_variable(envp);
+	//char *str = path_exist(vector[1], env);
+	//char *args[] = {str, NULL};
+	//execve(str, args, envp);
+	check_redirections(vector[1], envp);
+	/*if (str == NULL)
 		printf("%s n'existe pas\n", str);
 	else
 		printf("%s existe\n", str);
-	free(str);
-
+	free(str);*/
 	return (0);
 }

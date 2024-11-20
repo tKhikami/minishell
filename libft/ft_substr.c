@@ -13,8 +13,8 @@
 #include "libft.h"
 
 static int	min(int a, int b)
-{	
-	if (a < b) 
+{
+	if (a < b)
 		return (a);
 	else
 		return (b);
@@ -23,11 +23,11 @@ static int	min(int a, int b)
 char	*ft_substr(const char *s, unsigned int start, size_t len)
 {
 	size_t	length;
-	int i;
-	int minlen;
+	int		i;
+	int		minlen;
 	char	*ret;
 
-	i = 0; 
+	i = 0;
 	length = ft_strlen(s);
 	if (s == NULL || start > length || len < 0 || start < 0)
 		return (NULL);

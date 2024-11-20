@@ -32,7 +32,8 @@ SRC = main.c \
 	  environment.c \
 	  separation.c \
 	  tools.c \
-	  execution.c
+	  execution.c \
+	  redirections.c \
 
 OBJ = $(SRC:.c=.o)
 
