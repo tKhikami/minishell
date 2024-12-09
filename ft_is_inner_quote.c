@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int ft_is_inner_quote(char *str, char *to_compare)
+int	ft_is_inner_quote(char *str, char *to_compare)
 {
 	int		i;	
 	char	*open;
@@ -34,7 +34,7 @@ int ft_is_inner_quote(char *str, char *to_compare)
 		close = &open[1];
 		while (close[0] != open[0] && close[0] != '\0')
 			close++;
-	}	
+	}
 	if (open < to_compare && to_compare < close && close[0] != '\0')
 		return (1);
 	else

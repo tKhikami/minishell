@@ -14,7 +14,7 @@
 
 char	*ft_strtok(char *str, int c)
 {
-	static char *ptr;
+	static char	*ptr;
 	char		*ret;
 	int			i;
 
@@ -26,8 +26,8 @@ char	*ft_strtok(char *str, int c)
 	ret = ptr;
 	while (ptr[i] != c && ptr[i] != '\0')
 		i++;
-	while  (ptr[i] == c)
-	{	
+	while (ptr[i] == c)
+	{
 		if (ptr[i] == '\0')
 		{
 			ptr = NULL;
@@ -35,7 +35,7 @@ char	*ft_strtok(char *str, int c)
 		}
 		ptr[i] = '\0';
 		i++;
-	}	
+	}
 	ptr = ptr + i;
 	return (ret);
 }

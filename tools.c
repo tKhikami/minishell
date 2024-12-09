@@ -174,8 +174,26 @@ void	free_token(t_token *tok)
 
 void	free_variable(void *var)
 {
-	free(((t_variable *)var)->varname);
-	free(((t_variable *)var)->value);
+	free(((t_assign *)var)->var_name);
+	free(((t_assign *)var)->value);
 	free(var);
 	var = NULL;
+}
+
+int	print_token(t_token *tok)
+{
+	t_token	*tmp;
+	int		ret;
+
+	tmp = tok;
+	ret = 0;
+	if (tok == NULL)
+		return (printf("NULL"));
+	while (tmp != NULL)
+	{
+		ret += printf("Type :	%d\ntoken : %s\n\
+				**************\n", (int)tmp->type, tmp->tok);
+		tmp = tmp->next;
+	}
+	return (ret);
 }

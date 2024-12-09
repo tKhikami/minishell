@@ -14,11 +14,11 @@
 
 void	ft_print_node(t_node *node)
 {
-	static int  i;
+	static int	i;
 
-    i++;
-    ft_printf("######## %d #######\n", i);
-    ft_printf("str  : %s\n", node->str);
+	i++;
+	ft_printf("######## %d #######\n", i);
+	ft_printf("str  : %s\n", node->str);
 	ft_printf("left	: %p\n", node->left);
 	ft_printf("right	: %p\n\n", node->right);
 }

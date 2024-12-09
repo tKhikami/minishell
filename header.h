@@ -19,12 +19,8 @@
 # include <unistd.h>
 # include "minishell.h"
 # include <sys/stat.h>
-
-typedef struct s_variable
-{
-	char	*varname;
-	char	*value;
-}	t_variable;
+# include <sys/wait.h>
+# include <fcntl.h>
 
 /******************* TOOLS ******************/
 
@@ -71,5 +67,9 @@ char	**ultimate_get_argument(t_token *tok, t_list *env);
 
 char	*path_valid(char *path);
 char	*path_exist(char *executable, t_list *env);
+int		open_file(t_token *tmp);
+int		open_outputs(int fd, t_token *tok);
+int		open_inputs(int fd, t_token *tok);
+int		execve_inout(int in, int out, char **com, char **envp);
 
 #endif

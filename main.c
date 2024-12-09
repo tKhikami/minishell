@@ -14,18 +14,22 @@
 
 int	main(int n, char *vector[], char *envp[])
 {
-	(void)n;
-	(void)vector;
+	if (n != 2)
+		return (-1);
 	t_list	*env = get_all_variable(envp);
-	char	*str = ft_strdup("cat -e\"main.c\" '$SHLVL'$SHLVL >> file2");
-	t_token	*tok = full_tokenization(str);
-	char	**tab = ultimate_get_argument(tok, env);
-	ft_print_tab((const char **)tab);
-	
-	free_token(tok);
-	ft_tabfree(tab);
+	t_token	*tok = full_tokenization(vector[1]);
+	char	**command = ultimate_get_argument(tok, env);
+
+	int	in_fd = open_inputs(-2, tok);
+	int	out_fd = open_outputs(-2, tok);
+
+	if (in_fd == -1 || out_fd == -1)
+		return (-1);
+	execve_inout(in_fd, out_fd, command, envp);
+	close(in_fd);
+	close(out_fd);
 	ft_lstclear(&env, &free_variable);
-	free(str);
-	
+	free_token(tok);
+	ft_tabfree(command);
 	return (0);
 }

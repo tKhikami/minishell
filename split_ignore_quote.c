@@ -6,7 +6,7 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 08:36:07 by atolojan          #+#    #+#             */
-/*   Updated: 2024/10/29 10:44:38 by nyrandri         ###   ########.fr       */
+/*   Updated: 2024/12/09 10:56:20 by nyrandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,31 +25,31 @@ static char	**check_malloc(char **tab, int i)
 
 static void	take_word(char **tab, const char *s, char c)
 {
-	int		i;
-	int		j;
+	int		i[2];
 	int		count;
 
-	i = 0;
-	j = 0;
-	while (s[i] != '\0')
+	i[0] = 0;
+	i[1] = 0;
+	while (s[i[0]] != '\0')
 	{
-		if (s[i] != c)
+		if (s[i[0]] != c)
 		{
 			count = 0;
-			while (s[i] != '\0' && s[i] != c && ft_is_inner_quote((char *)s, (char *)&s[i]))
+			while (s[i[0]] != '\0' && s[i[0]] != c && \
+					ft_is_inner_quote((char *)s, (char *)&s[i[0]]))
 			{
 				count++;
-				i++;
+				(i[0])++;
 			}
-			tab[j] = ft_substr(s, i - count, count);
-			check_malloc(tab, j);
-			j++;
+			tab[i[1]] = ft_substr(s, i[0] - count, count);
+			check_malloc(tab, i[1]);
+			(i[1])++;
 		}
 		else
-			i++;
+			(i[0])++;
 	}
 	if (tab)
-		tab[j] = NULL;
+		tab[i[1]] = NULL;
 }
 
 char	**split_ignore_quote(char const *s, char c)

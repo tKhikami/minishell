@@ -6,15 +6,15 @@
 /*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:16:39 by nyrandri          #+#    #+#             */
-/*   Updated: 2024/11/17 16:23:08 by nyrandri         ###   ########.fr       */
+/*   Updated: 2024/12/09 10:42:45 by nyrandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_token *ft_create_token(char *token, t_status type)
+static t_token	*ft_create_token(char *token, t_status type)
 {
-	t_token *value;
+	t_token	*value;
 
 	value = malloc(sizeof(t_token));
 	value->tok = token;
@@ -23,35 +23,34 @@ static t_token *ft_create_token(char *token, t_status type)
 	return (value);
 }
 
+static int	mini_check_status(char *str, int i)
+{
+	ft_bzero(str, i);
+	return (i);
+}
+
 static t_status	check_status(char **tmp)
 {
 	while (ft_is_in_set(" \t\n\v", *tmp[0]) != 0)
-	{
-		*tmp[0] = '\0';
-		(*tmp)++;
-	}
+		*tmp += mini_check_status(*tmp, 1);
 	if (ft_strncmp(*tmp, DELIM_INPUT, 2) == 0)
 	{
-		ft_bzero(*tmp, 2);
-		*tmp += 2;
+		*tmp += mini_check_status(*tmp, 2);
 		return (delim_input);
 	}
 	else if (ft_strncmp(*tmp, APPEND_OUTPUT, 2) == 0)
 	{
-		ft_bzero(*tmp, 2);
-		*tmp += 2;
+		*tmp += mini_check_status(*tmp, 2);
 		return (append_output);
 	}
 	else if (ft_strncmp(*tmp, NORMAL_OUTPUT, 1) == 0)
 	{
-		ft_bzero(*tmp, 1);
-		*tmp += 1;
+		*tmp += mini_check_status(*tmp, 1);
 		return (normal_output);
 	}
 	else if (ft_strncmp(*tmp, NORMAL_INPUT, 1) == 0)
 	{
-		ft_bzero(*tmp, 1);
-		*tmp += 1;
+		*tmp += mini_check_status(*tmp, 1);
 		return (normal_input);
 	}
 	return (command);
@@ -69,9 +68,9 @@ static void	move_cursor_to_the_first_set(char **cursor, char *set)
 		(*cursor)++;
 }
 
-static t_token *ft_tokenization(char *str)
+static t_token	*ft_tokenization(char *str)
 {
-	static char *tmp;
+	static char	*tmp;
 	t_token		*token;
 	static int	i;
 
@@ -97,11 +96,11 @@ static t_token *ft_tokenization(char *str)
 	return (token);
 }
 
-t_token *full_tokenization(char *str)
+t_token	*full_tokenization(char *str)
 {
-	t_token *tok;
-	t_token *tmp;
-	t_token *prev;
+	t_token	*tok;
+	t_token	*tmp;
+	t_token	*prev;
 
 	if (str == NULL)
 		return (NULL);

@@ -6,13 +6,14 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 10:56:15 by atolojan          #+#    #+#             */
-/*   Updated: 2024/09/26 08:55:08 by nyrandri         ###   ########.fr       */
+/*   Updated: 2024/12/09 10:58:01 by nyrandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_reverse_strtok(char *str, char *delims, int (*ignore)(char *, char *))
+char	*ft_reverse_strtok(char *str, char *delims, \
+		int (*ignore)(char *, char *))
 {
 	static int	len;
 	static char	*s;
@@ -24,7 +25,8 @@ char	*ft_reverse_strtok(char *str, char *delims, int (*ignore)(char *, char *))
 	}
 	while (len > 0)
 	{
-		if (ft_sub_chainechr(&s[len - 1], delims) != NULL && ignore(s, &s[len - 1]) == 0)
+		if (ft_substrchr(&s[len - 1], delims) != NULL && \
+				ignore(s, &s[len - 1]) == 0)
 		{
 			len--;
 			ft_bzero(&s[len], ft_strlen(delims));
