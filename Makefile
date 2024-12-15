@@ -28,7 +28,9 @@ SRC = main.c \
 	  environment.c \
 	  separation.c \
 	  tools.c \
-	  execution.c
+	  execution.c \
+	  get_next_line.c \
+	  get_next_line_utils.c
 
 OBJ = $(SRC:.c=.o)
 

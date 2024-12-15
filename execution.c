@@ -12,6 +12,72 @@
 
 #include "header.h"
 
+int	get_stdin_fd(char **envp)
+{
+	char	*str;
+	int		std_fd;
+
+	str = variable_chr_tab("std_fd", envp);
+	if (str == NULL)
+		return (-1);
+	std_fd = ft_atoi(str);
+	free(str);
+	return (std_fd);
+}
+
+char	*dup_stdin_fd(int *std_fd)
+{
+	char	*tmp;
+	char	*str;
+
+	*std_fd = dup(STDIN_FILENO);
+	if (*std_fd < 0)
+		return (NULL);
+	tmp = ft_itoa(*std_fd);
+	if (tmp == NULL)
+	{
+		close(*std_fd);
+		return (NULL);
+	}
+	str = malloc(ft_strlen(tmp) + 8);
+	if (str != NULL)
+	{
+		ft_memmove(str, "std_fd=", 7);
+		ft_memmove(str + 7, (const void *)tmp, ft_strlen(tmp) + 1);
+	}
+	else
+		close(*std_fd);
+	free(tmp);
+	return (str);
+}
+
+char	**add_stdin_fd(char **envp)
+{
+	int		std_fd;
+	char	*tmp;
+	char	**tab;
+	char	**ret;
+
+	tmp = dup_stdin_fd(&std_fd);
+	if (tmp == NULL)
+		return (NULL);
+	tab = malloc(sizeof(char *) * 2);
+	ret = NULL;
+	if (tab != NULL)
+	{
+		tab[0] = tmp;
+		tab[1] = NULL;
+		ret = ft_concatenate_tab(envp, tab);
+	}
+	if (ret == NULL)
+	{
+		close(std_fd);
+		free(tmp);
+	}
+	free(tab);
+	return (ret);
+}
+
 char	*path_valid(char *path)
 {
 	if (path == NULL)
@@ -51,16 +117,57 @@ char	*path_exist(char *executable, t_list *env)
 	return (ptr);
 }
 
-int	open_file(t_token *tmp)
+char	*mini_readline(char *prompt, int fd)
+{
+	char	*str;
+
+	ft_putstr_fd(prompt, fd);
+	str = get_next_line(fd);
+	str[ft_strlen(str) - 1] = '\0';
+	return (str);
+}
+
+int	open_heredoc(t_token *tmp, int std_fd)
+{
+	int		fd[2];
+	char	*str;
+	char	*doc;
+
+	if (pipe(fd) == -1)
+		return (-1);
+	doc = ft_strtrim(tmp->tok, " ");
+	str = ft_strdup("");
+	while (ft_strcmp(str, doc) != 0)
+	{
+		free(str);
+		str = mini_readline("> ", std_fd);
+		if (ft_strcmp(str, doc) == 0 || ft_strcmp(str, doc) == 2000000000)
+			break ;
+		ft_putendl_fd(str, fd[1]);
+	}
+	if (str == NULL)
+	{
+		close(fd[0]);
+		fd[0] = -1;
+	}
+	free(str);
+	free(doc);
+	close(fd[1]);
+	return (fd[0]);
+}
+
+int	open_file(t_token *tmp, int std_fd)
 {
 	int	fd;
 
 	if (tmp->type == normal_input)
-		fd = open(tmp->tok, O_RDONLY);
+		fd = open(tmp->tok, O_RDONLY, 0644);
 	else if (tmp->type == normal_output)
-		fd = open(tmp->tok, O_WRONLY | O_CREAT | O_TRUNC);
+		fd = open(tmp->tok, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (tmp->type == append_output)
-		fd = open(tmp->tok, O_WRONLY | O_CREAT | O_APPEND);
+		fd = open(tmp->tok, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else if (tmp->type == delim_input)
+		fd = open_heredoc(tmp, std_fd);
 	else
 		fd = -1;
 	if (fd == -1)
@@ -83,12 +190,12 @@ int	open_outputs(int fd, t_token *tok)
 	if (fd == -2)
 	{
 		if (tok->type == normal_output || tok->type == append_output)
-			fd = open_file(tok);
+			fd = open_file(tok, 1);
 		return (open_outputs(fd, tok->next));
 	}
 	if (tok->type == normal_output || tok->type == append_output)
 	{
-		fd_tmp = open_file(tok);
+		fd_tmp = open_file(tok, 1);
 		if (fd_tmp == -1)
 		{
 			close(fd);
@@ -100,7 +207,7 @@ int	open_outputs(int fd, t_token *tok)
 	return (open_outputs(fd, tok->next));
 }
 
-int	open_inputs(int fd, t_token *tok)
+int	open_inputs(int fd, t_token *tok, int std_fd)
 {
 	int	fd_tmp;
 
@@ -110,19 +217,19 @@ int	open_inputs(int fd, t_token *tok)
 		return (-1);
 	if (fd == -2)
 	{
-		if (tok->type == normal_input)
-			fd = open_file(tok);
-		return (open_inputs(fd, tok->next));
+		if (tok->type == normal_input || tok->type == delim_input)
+			fd = open_file(tok, std_fd);
+		return (open_inputs(fd, tok->next, std_fd));
 	}
-	if (tok->type == normal_input)
+	if (tok->type == normal_input || tok->type == delim_input)
 	{
-		fd_tmp = open_file(tok);
+		fd_tmp = open_file(tok, std_fd);
 		close (fd);
 		if (fd_tmp == -1)
 			return (-1);
 		fd = fd_tmp;
 	}
-	return (open_inputs(fd, tok->next));
+	return (open_inputs(fd, tok->next, std_fd));
 }
 
 int	execve_inout(int in, int out, char **com, char **envp)
@@ -131,9 +238,13 @@ int	execve_inout(int in, int out, char **com, char **envp)
 	char	*path;
 	t_list	*env;
 
+	if (com == NULL)
+		return (-1);
 	env = get_all_variable(envp);
 	path = path_exist(com[0], env);
 	ft_lstclear(&env, &free_variable);
+	if (path == NULL)
+		return (-1);
 	id = fork();
 	if (id == 0)
 	{
@@ -145,8 +256,7 @@ int	execve_inout(int in, int out, char **com, char **envp)
 			return (-1);
 		}
 	}
-	else
-		wait(NULL);
+	wait(NULL);
 	free(path);
 	return (0);
 }
