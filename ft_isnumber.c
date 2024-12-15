@@ -12,13 +12,13 @@
 
 #include "libft/libft.h"
 
-int ft_isnumber(const char *number)
+int	ft_isnumber(const char *number)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (number != NULL)
-	{	
+	{
 		if (number[0] == '-' || number[0] == '+')
 			i++;
 		while (number[i] != '\0')
@@ -28,6 +28,6 @@ int ft_isnumber(const char *number)
 			i++;
 		}
 		return (0);
-	}	
+	}
 	return (-2);
 }

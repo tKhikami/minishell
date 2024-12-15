@@ -25,8 +25,8 @@ t_node	*ft_create_node(char *str)
 
 void	ft_branching(t_node *node)
 {
-	char		*tmp;
-	
+	char	*tmp;
+
 	if (node != NULL)
 	{
 		tmp = ft_reverse_strtok(node->str, PIPE, &ft_is_inner_quote);
@@ -35,7 +35,7 @@ void	ft_branching(t_node *node)
 		node->left = ft_create_node(node->str);
 		node->right = ft_create_node(tmp);
 		node->str = NULL;
-	}	
+	}
 }
 
 t_node	*ft_create_tree(char *str)

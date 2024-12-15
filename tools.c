@@ -176,8 +176,8 @@ void	free_token(t_token *tok)
 
 void	free_variable(void *var)
 {
-	free(((t_variable *)var)->varname);
-	free(((t_variable *)var)->value);
+	free(((t_assign *)var)->var_name);
+	free(((t_assign *)var)->value);
 	free(var);
 	var = NULL;
 }

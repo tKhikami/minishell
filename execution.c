@@ -80,11 +80,9 @@ char	**add_stdin_fd(char **envp)
 
 char	*path_valid(char *path)
 {
-	struct stat	statbuff;
-
 	if (path == NULL)
 		return (NULL);
-	if (stat(path, &statbuff) == 0)
+	if (access(path, F_OK | X_OK) == 0)
 		return (ft_strdup(path));
 	else
 		return (NULL);
@@ -99,7 +97,9 @@ char	*path_exist(char *executable, t_list *env)
 	char	buffer[300];
 
 	tmp = variable_chr(env, "PATH");
-	value = ((t_variable *)tmp->content)->value;
+	if (tmp == NULL)
+		return (NULL);
+	value = ((t_assign *)tmp->content)->value;
 	ft_strlcpy(path, value, ft_strlen(value) + 1);
 	ptr = ft_strtok(path, ':');
 	while (ptr != NULL)
@@ -112,7 +112,7 @@ char	*path_exist(char *executable, t_list *env)
 		if (ptr == NULL)
 			ptr = ft_strtok(NULL, ':');
 		else
-			return (ft_strdup(buffer));
+			return (ptr);
 	}
 	return (ptr);
 }

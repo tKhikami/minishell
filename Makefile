@@ -7,9 +7,11 @@ SUPPRESSION_FILE = readline.supp
 SRC = main.c \
 	  ft_print_tab.c \
 	  ft_strtok.c \
+	  signals.c \
 	  ft_isnumber.c \
 	  builtins.c \
 	  ft_reverse_strtok.c \
+	  ft_substrchr.c \
 	  ft_print_tree.c \
 	  ft_nodeiter.c \
 	  ft_create_tree.c \
@@ -20,8 +22,6 @@ SRC = main.c \
 	  check_builtins.c \
 	  ft_split_ignore_quote.c \
 	  split_ignore_quote.c \
-	  ft_export.c \
-	  ft_unset.c \
 	  ft_is_whitespace.c \
 	  get_line.c \
 	  dollar.c \

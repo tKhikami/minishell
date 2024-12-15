@@ -117,19 +117,45 @@ char	**ultimate_get_argument(t_token *tok, t_list *env)
 	return (tab);
 }
 
+static char	**mini_get_argument(t_token *ptr, char **tab)
+{
+	char	**buff;
+	char	**ret;
+
+	if (tab == NULL)
+	{
+		tab = ft_split_ignore_quote(ptr->tok, ' ');
+		return (tab);
+	}
+	else
+	{
+		buff = ft_split_ignore_quote(ptr->tok, ' ');
+		ret = ft_concatenate_tab(tab, buff);
+		free(tab);
+		free(buff);
+		return (ret);
+	}
+}
+
 char	**get_argument(t_token *tok, t_list *env)
 {
 	t_token	*tmp;
 	char	**tab;
 
 	(void)env;
+	tab = NULL;
 	if (tok == NULL)
 		return (NULL);
 	tmp = tok;
-	while (tmp->type != command && tmp->next != NULL)
+	while (tmp != NULL)
+	{
+		if (tmp->type == command)
+		{
+			tab = mini_get_argument(tmp, tab);
+			if (tab == NULL)
+				return (NULL);
+		}
 		tmp = tmp->next;
-	if (tmp->type != command)
-		return (NULL);
-	tab = ft_split_ignore_quote(tmp->tok, ' ');
+	}
 	return (tab);
 }

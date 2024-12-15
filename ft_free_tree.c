@@ -24,5 +24,5 @@ void	ft_free_tree(t_node *root)
 		free(root);
 		ft_free_tree(left);
 		ft_free_tree(right);
-	}	
+	}
 }

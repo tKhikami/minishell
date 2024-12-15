@@ -6,7 +6,7 @@
 /*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:14:45 by nyrandri          #+#    #+#             */
-/*   Updated: 2024/11/17 16:16:04 by nyrandri         ###   ########.fr       */
+/*   Updated: 2024/12/09 09:24:49 by nyrandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ char	*get_dollar_value(t_list *env, char *str)
 	if (ptr == NULL)
 		ret = ft_strdup("");
 	else
-		ret = ft_strdup(((t_variable *)ptr->content)->value);
+		ret = ft_strdup(((t_assign *)ptr->content)->value);
 	if (ret == NULL)
 		return (NULL);
 	else

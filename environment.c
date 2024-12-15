@@ -6,7 +6,7 @@
 /*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:06:33 by nyrandri          #+#    #+#             */
-/*   Updated: 2024/12/15 17:26:23 by nyrandri         ###   ########.fr       */
+/*   Updated: 2024/12/15 17:55:31 by nyrandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 void	del_variable(void *var)
 {
-	t_variable	*tmp;
+	t_assign	*tmp;
 
-	tmp = (t_variable *)var;
+	tmp = (t_assign *)var;
 	if (var != NULL)
 	{
-		free(tmp->varname);
+		free(tmp->var_name);
 		free(tmp->value);
 		free(tmp);
 	}
@@ -27,34 +27,34 @@ void	del_variable(void *var)
 
 int	print_variable(void *var)
 {
-	t_variable	*tmp;
+	t_assign	*tmp;
 	int			ret;
 
-	tmp = (t_variable *)var;
+	tmp = (t_assign *)var;
 	ret = 0;
 	if (tmp == NULL)
 		ret += printf("NULL");
 	else
-		ret += printf("%s || %s", tmp->varname, tmp->value);
+		ret += printf("%s || %s", tmp->var_name, tmp->value);
 	ret += printf("\n");
 	return (ret);
 }
 
 t_list	*get_one_variable(char *str)
 {
-	t_variable	*tmp;
+	t_assign	*tmp;
 	t_list		*lst;
 	char		*ptr;
 
 	ptr = ft_strchr(str, '=');
-	tmp = malloc(sizeof(t_variable));
+	tmp = malloc(sizeof(t_assign));
 	if (tmp != NULL)
 	{
-		tmp->varname = ft_substr(str, 0, ptr - str);
+		tmp->var_name = ft_substr(str, 0, ptr - str);
 		tmp->value = ft_strdup(ptr + 1);
-		if (tmp->varname == NULL || tmp->value == NULL)
+		if (tmp->var_name == NULL || tmp->value == NULL)
 		{
-			free(tmp->varname);
+			free(tmp->var_name);
 			free(tmp->value);
 			free(tmp);
 			return (NULL);
@@ -99,7 +99,7 @@ t_list	*variable_chr(t_list *env, char *str)
 	tmp = env;
 	while (tmp != NULL)
 	{
-		if (ft_strcmp(((t_variable *)tmp->content)->varname, str) == 0)
+		if (ft_strcmp(((t_assign *)tmp->content)->var_name, str) == 0)
 			return (tmp);
 		tmp = tmp->next;
 	}

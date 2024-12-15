@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
+/*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 09:01:48 by atolojan          #+#    #+#             */
-/*   Updated: 2024/12/15 17:32:01 by nyrandri         ###   ########.fr       */
+/*   Updated: 2024/12/15 18:01:52 by nyrandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # define DELIM_INPUT "<<"
 # define APPEND_OUTPUT ">>"
 
-typedef enum	e_status
+typedef enum e_status
 {
 	command,
 	normal_input,
@@ -39,20 +39,20 @@ typedef enum	e_status
 	undefine
 }	t_status;
 
-typedef struct	s_token
+typedef struct s_token
 {
 	char			*tok;
 	t_status		type;
 	struct s_token	*next;
 }	t_token;
 
-typedef struct	s_assign
+typedef struct s_assign
 {
 	char	*var_name;
 	char	*value;
 }			t_assign;
 
-typedef struct	s_node
+typedef struct s_node
 {
 	char			*str;
 	struct s_node	*left;
@@ -61,61 +61,62 @@ typedef struct	s_node
 
 /************************ TOOLS *********************/
 
-int		ft_print_tab(const char **tab);
-int		ft_isnumber(const char *number);
-int		ft_is_inner_quote(char *str, char *to_compare);
-int		ft_is_in_set(char *set, char c);
-void	ft_handle_signals(int sig);
-char	*ft_sub_chainechr(char *s1, char *s2);
-char	*ft_reverse_strtok(char *s, char *del, int (*ignore)(char *, char *));
-t_token	*full_tokenization(char *str);
-int		check_builtins(char *str, t_list *envp);
-char	**ft_lsttotab(t_list *lst);
-void	ft_lstfree(t_list **lst);
-char	**ft_split_ignore_quote(char *str, char c);
-char	**split_ignore_quote(char const *s, char c);
-void	env_to_tlist(t_list **envp, char *env[], int count);
-int		is_an_assignment(char *str);
-void	print_content(void *content);
-int		ft_is_whitespace(char c);
-void	handle_export(t_list **exp, char **s, int i);
-char	*search_value(t_list *exp, char *str);
+int			ft_print_tab(const char **tab);
+int			ft_isnumber(const char *number);
+int			ft_is_inner_quote(char *str, char *to_compare);
+int			ft_is_in_set(char *set, char c);
+void		handle_signals(int sig);
+char		*ft_substrchr(char *s1, char *s2);
+char		*ft_reverse_strtok(char *str, char *delims, \
+		int (*ignore)(char *, char *));
+t_token		*full_tokenization(char *str);
+int			check_builtins(char *str, t_list *envp);
+char		**ft_lsttotab(t_list *lst);
+void		ft_lstfree(t_list **lst);
+char		**ft_split_ignore_quote(char *str, char c);
+char		**split_ignore_quote(char const *s, char c);
+void		env_to_tlist(t_list **envp, char *env[], int count);
+int			is_an_assignment(char *str);
+void		print_content(void *content);
+int			ft_is_whitespace(char c);
+void		handle_export(t_list **exp, char **s, int i);
+char		*search_value(t_list *exp, char *str);
 t_assign	*extract_assign(char *str);
-void	remove_assign(t_assign *assign);
-t_list	*get_all_variable(char **str);
+void		remove_assign(t_assign *assign);
+t_list		*get_all_variable(char **str);
 
 /******************* BUILTIN COMMAD *****************/
 
-int		ft_builtin_cmd(const char **tab, t_list *envp);
-int		ft_cd(const char *path);
-int		ft_pwd(char *tab);
-int		ft_echo(const char **tab);
-int		ft_export(t_list **exp, char *str);
-int		ft_env(t_list *envp, int sorted);
-int		ft_cd(const char *path);
-int		ft_pwd(char *tab);
-int		ft_echo(const char **tab);
-int		ft_unset(t_list **env, char *str);
+int			ft_builtin_cmd(const char **tab, t_list *envp);
+int			ft_cd(const char *path);
+int			ft_pwd(char *tab);
+int			ft_echo(const char **tab);
+int			ft_export(t_list **exp, char *str);
+int			ft_env(t_list *envp, int sorted);
+int			ft_cd(const char *path);
+int			ft_pwd(char *tab);
+int			ft_echo(const char **tab);
+int			ft_unset(t_list **env, char *str);
 
 /***************** TREE MANIPULATION ****************/
 
-void	ft_nodeiter(t_node *node, void (*f)(t_node *));
-void	ft_print_node(t_node *node);
-void	ft_print_tree(t_node *node);
-void	ft_free_tree(t_node *root);
-t_node	*ft_create_node(char *str);
-void	ft_branching(t_node *node);
-t_node	*ft_create_tree(char *str);
+void		ft_nodeiter(t_node *node, void (*f)(t_node *));
+void		ft_print_node(t_node *node);
+void		ft_print_tree(t_node *node);
+void		ft_free_tree(t_node *root);
+t_node		*ft_create_node(char *str);
+void		ft_branching(t_node *node);
+t_node		*ft_create_tree(char *str);
 
 /****************** EXEC FUNCTION *******************/
 
-char	**get_argument(t_token *tok, t_list *env);
-char	*get_variable(char *str, t_list *env);
-void	check_redirections(char *str, char *envp[]);
-char	*path_exist(char *exec, t_list *env);
+void		check_redirections(char *str, char *envp[]);
+char		*path_exist(char *exec, t_list *env);
+char		**get_argument(t_token *tok, t_list *env);
+char		*get_variable(char *str, t_list *env);
 
 /********************  KERNEL  **********************/
 
-void	get_line(int *exit_status, char *env[]);
+void		get_line(int *exit_status, char *env[]);
 
 #endif

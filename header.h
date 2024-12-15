@@ -20,12 +20,8 @@
 # include "minishell.h"
 # include "get_next_line.h"
 # include <sys/stat.h>
-
-typedef struct s_variable
-{
-	char	*varname;
-	char	*value;
-}	t_variable;
+# include <sys/wait.h>
+# include <fcntl.h>
 
 /******************* TOOLS ******************/
 

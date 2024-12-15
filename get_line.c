@@ -10,9 +10,9 @@
 /*																			  */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "header.h"
 
-void	get_line(int *exit_status, char *env[])
+void	get_line(int *exit_status, char *envp[])
 {
 	char	*str;
 	char	**tab;
@@ -26,11 +26,7 @@ void	get_line(int *exit_status, char *env[])
 		str = readline("$>");
 		if (str != NULL)
 		{
-			add_history(str);
-			tok = full_tokenization(str);
-			tab = get_argument(tok, envar);
-			ft_print_tab((const char **)tab);
-			free(str);
+			//*exit_status = exec_ult(str, envp);
 		}
 		else
 		{
