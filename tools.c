@@ -181,8 +181,6 @@ void	free_variable(void *var)
 	free(var);
 	var = NULL;
 }
-<<<<<<< HEAD
-=======
 
 int	print_token(t_token *tok)
 {
@@ -236,4 +234,3 @@ char	**ft_tabdup(char **tab)
 	}
 	return (ret);
 }
->>>>>>> 348bb52 (execution semble marcher. Il faut plus de teste)

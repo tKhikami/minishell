@@ -7,11 +7,9 @@ SUPPRESSION_FILE = readline.supp
 SRC = main.c \
 	  ft_print_tab.c \
 	  ft_strtok.c \
-	  ft_handle_signals.c \
 	  ft_isnumber.c \
 	  builtins.c \
 	  ft_reverse_strtok.c \
-	  ft_sub_chainechr.c \
 	  ft_print_tree.c \
 	  ft_nodeiter.c \
 	  ft_create_tree.c \

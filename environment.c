@@ -6,11 +6,7 @@
 /*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:06:33 by nyrandri          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/11/17 16:07:35 by nyrandri         ###   ########.fr       */
-=======
-/*   Updated: 2024/12/15 16:02:16 by nyrandri         ###   ########.fr       */
->>>>>>> 348bb52 (execution semble marcher. Il faut plus de teste)
+/*   Updated: 2024/12/15 17:26:23 by nyrandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

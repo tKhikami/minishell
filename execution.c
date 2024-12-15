@@ -116,8 +116,6 @@ char	*path_exist(char *executable, t_list *env)
 	}
 	return (ptr);
 }
-<<<<<<< HEAD
-=======
 
 char	*mini_readline(char *prompt, int fd)
 {
@@ -262,4 +260,3 @@ int	execve_inout(int in, int out, char **com, char **envp)
 	free(path);
 	return (0);
 }
->>>>>>> 348bb52 (execution semble marcher. Il faut plus de teste)
