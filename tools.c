@@ -102,6 +102,8 @@ char	**ft_concatenate_tab(char **tab1, char **tab2)
 
 	if (tab1 == NULL || tab2 == NULL)
 		return (NULL);
+	if (tab2[0] == NULL)
+		return (NULL);
 	i = 0;
 	j = 0;
 	ret = malloc(sizeof(char *) * (ft_tablen(tab1) + ft_tablen(tab2) + 1));
@@ -179,3 +181,59 @@ void	free_variable(void *var)
 	free(var);
 	var = NULL;
 }
+<<<<<<< HEAD
+=======
+
+int	print_token(t_token *tok)
+{
+	t_token	*tmp;
+	int		ret;
+
+	tmp = tok;
+	ret = 0;
+	if (tok == NULL)
+		return (printf("NULL"));
+	while (tmp != NULL)
+	{
+		ret += printf("Type :	%d\ntoken : %s\n\
+				**************\n", (int)tmp->type, tmp->tok);
+		tmp = tmp->next;
+	}
+	return (ret);
+}
+
+int	ft_min(int n, int m)
+{
+	if (n < m)
+		return (n);
+	else
+		return (m);
+}
+
+char	**ft_tabdup(char **tab)
+{
+	char	**ret;
+	int		i;
+	int		tab_len;
+
+	if (tab == NULL)
+		return (NULL);
+	tab_len = ft_tablen(tab);
+	i = 0;
+	ret = malloc(sizeof(char *) * (tab_len + 1));
+	if (ret == NULL)
+		return (ret);
+	while (i < tab_len)
+	{
+		ret[i] = ft_strdup(tab[i]);
+		ret[i + 1] = NULL;
+		if (ret[i] == NULL)
+		{
+			ft_tabfree(ret);
+			return (NULL);
+		}
+		i++;
+	}
+	return (ret);
+}
+>>>>>>> 348bb52 (execution semble marcher. Il faut plus de teste)

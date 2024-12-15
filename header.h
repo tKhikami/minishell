@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include "minishell.h"
+# include "get_next_line.h"
 # include <sys/stat.h>
 
 typedef struct s_variable
@@ -40,6 +41,8 @@ void	ft_lstinsert(t_list *lst, t_list *newlst);
 int		format_content_char(void *str);
 void	free_token(t_token *tok);
 void	free_variable(void *var);
+int		ft_min(int n, int m);
+char	**ft_tabdup(char **tab);
 
 /***************** ENVIRONMENT **************/
 
@@ -48,6 +51,7 @@ int		print_variable(void *var);
 t_list	*get_one_variable(char *str);
 t_list	*get_all_variable(char **tab);
 t_list	*variable_chr(t_list *env, char *str);
+char	*variable_chr_tab(char *variable, char **envp);
 
 /****************** DOLLAR ******************/
 
@@ -69,7 +73,17 @@ char	**ultimate_get_argument(t_token *tok, t_list *env);
 
 /**************** EXECUTION ****************/
 
+int		get_stdin_fd(char **envp);
+char	*dup_stdin_fd(int *std_fd);
+char	**add_stdin_fd(char **envp);
 char	*path_valid(char *path);
 char	*path_exist(char *executable, t_list *env);
+<<<<<<< HEAD
+=======
+int		open_file(t_token *tmp, int std_fd);
+int		open_outputs(int fd, t_token *tok);
+int		open_inputs(int fd, t_token *tok, int std_fd);
+int		execve_inout(int in, int out, char **com, char **envp);
+>>>>>>> 348bb52 (execution semble marcher. Il faut plus de teste)
 
 #endif

@@ -32,7 +32,12 @@ SRC = main.c \
 	  separation.c \
 	  tools.c \
 	  execution.c \
+<<<<<<< HEAD
 	  redirections.c \
+=======
+	  get_next_line.c \
+	  get_next_line_utils.c
+>>>>>>> 348bb52 (execution semble marcher. Il faut plus de teste)
 
 OBJ = $(SRC:.c=.o)
 

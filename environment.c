@@ -6,7 +6,11 @@
 /*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:06:33 by nyrandri          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/11/17 16:07:35 by nyrandri         ###   ########.fr       */
+=======
+/*   Updated: 2024/12/15 16:02:16 by nyrandri         ###   ########.fr       */
+>>>>>>> 348bb52 (execution semble marcher. Il faut plus de teste)
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +76,8 @@ t_list	*get_all_variable(char **tab)
 	t_list	*lst;
 	t_list	*tmp;
 
+	if (tab == NULL)
+		return (NULL);
 	i = ft_tablen(tab) - 1;
 	lst = NULL;
 	while (i >= 0)
@@ -102,4 +108,24 @@ t_list	*variable_chr(t_list *env, char *str)
 		tmp = tmp->next;
 	}
 	return (tmp);
+}
+
+char	*variable_chr_tab(char *variable, char **envp)
+{
+	int	i;
+	int	tab_len;
+	int	min;
+
+	i = 0;
+	tab_len = ft_tablen(envp);
+	while (i < tab_len)
+	{
+		min = ft_min(ft_strlen(variable), ft_strlen(envp[i]));
+		if (ft_memcmp(envp[i], variable, min) == 0 && envp[i][min] == '=')
+			break ;
+		i++;
+	}
+	if (i == tab_len)
+		return (NULL);
+	return (ft_strdup(&envp[i][min + 1]));
 }
