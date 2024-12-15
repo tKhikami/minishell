@@ -7,7 +7,6 @@ SUPPRESSION_FILE = readline.supp
 SRC = main.c \
 	  ft_print_tab.c \
 	  ft_strtok.c \
-	  ft_builtin_cmd.c \
 	  ft_handle_signals.c \
 	  ft_isnumber.c \
 	  builtins.c \
@@ -32,12 +31,9 @@ SRC = main.c \
 	  separation.c \
 	  tools.c \
 	  execution.c \
-<<<<<<< HEAD
 	  redirections.c \
-=======
 	  get_next_line.c \
 	  get_next_line_utils.c
->>>>>>> 348bb52 (execution semble marcher. Il faut plus de teste)
 
 OBJ = $(SRC:.c=.o)
 

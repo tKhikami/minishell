@@ -78,12 +78,9 @@ char	*dup_stdin_fd(int *std_fd);
 char	**add_stdin_fd(char **envp);
 char	*path_valid(char *path);
 char	*path_exist(char *executable, t_list *env);
-<<<<<<< HEAD
-=======
 int		open_file(t_token *tmp, int std_fd);
 int		open_outputs(int fd, t_token *tok);
 int		open_inputs(int fd, t_token *tok, int std_fd);
 int		execve_inout(int in, int out, char **com, char **envp);
->>>>>>> 348bb52 (execution semble marcher. Il faut plus de teste)
 
 #endif
