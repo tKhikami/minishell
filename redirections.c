@@ -6,7 +6,7 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 08:42:15 by atolojan          #+#    #+#             */
-/*   Updated: 2024/11/19 17:28:04 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/12/15 18:06:39 by nyrandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void	check_redirections(char *str, char *envp[])
 	t_token	*cmd;
 
 	(void)envp;
-	tok = ft_full_tokenization(str);
+	tok = full_tokenization(str);
 	if (!tok)
 		return ;
 	head = tok;

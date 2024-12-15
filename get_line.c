@@ -15,12 +15,11 @@
 void	get_line(int *exit_status, char *envp[])
 {
 	char	*str;
-	char	**tab;
 	t_list	*envar;
 
 	envar = NULL;
 	(void)exit_status;
-	(void)env;
+	(void)envp;
 	while (1)
 	{
 		str = readline("$>");
