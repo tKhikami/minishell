@@ -20,7 +20,7 @@ int	ft_is_inner_quote(char *str, char *to_compare)
 
 	open = str;
 	close = str - 1;
-	if (str == NULL)
+	if (str == NULL || to_compare == NULL)
 		return (0);
 	while (close < to_compare)
 	{

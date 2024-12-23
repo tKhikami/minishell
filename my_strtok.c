@@ -1,43 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_reverse_strtok.c                                :+:      :+:    :+:   */
+/*   my_strtok.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
+/*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/14 10:56:15 by atolojan          #+#    #+#             */
-/*   Updated: 2024/12/09 10:58:01 by nyrandri         ###   ########.fr       */
+/*   Created: 2024/12/22 16:09:20 by nyrandri          #+#    #+#             */
+/*   Updated: 2024/12/22 16:09:22 by nyrandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_reverse_strtok(char *str, char *delims, \
+char	*my_strtok(char *str, char *delims, \
 		int (*ignore)(char *, char *))
 {
-	static int	len;
 	static char	*s;
+	char		*tmp;
 
 	if (str != NULL)
-	{
 		s = str;
-		len = ft_strlen(str);
-	}
-	while (len > 0)
+	tmp = s;
+	while (s != NULL)
 	{
-		if (ft_substrchr(&s[len - 1], delims) != NULL && \
-				ignore(s, &s[len - 1]) == 0)
+		s = ft_substrchr(s, delims);
+		if (s != NULL && ignore(tmp, s) == 0)
 		{
-			len--;
-			ft_bzero(&s[len], ft_strlen(delims));
-			return (&s[len + ft_strlen(delims)]);
+			ft_bzero(s, ft_strlen(delims));
+			s = s + ft_strlen(delims);
+			return (s);
 		}
-		len--;
-	}
-	if (len == 0)
-	{
-		len--;
-		return (s);
 	}
 	return (NULL);
 }

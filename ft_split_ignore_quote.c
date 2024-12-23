@@ -81,6 +81,8 @@ char	**ft_split_ignore_quote(char *str, char c)
 
 	lstroot = NULL;
 	start = str;
+	if (str == NULL)
+		return (NULL);
 	while (start[0] != '\0')
 	{
 		lstroot = mini_split(lstroot, &start, c);
