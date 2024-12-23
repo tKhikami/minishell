@@ -29,6 +29,7 @@ SRC = main.c \
 	  separation.c \
 	  tools.c \
 	  execution.c \
+	  redirections.c \
 	  get_next_line.c \
 	  get_next_line_utils.c \
 	  set_heredoc.c
