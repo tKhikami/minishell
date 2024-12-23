@@ -12,87 +12,108 @@
 
 #include "header.h"
 
-int	execve_cmd(char *command, char **envp)
+int	execve_cmd(char *command, char **envp, int descriptor[])
 {
 	int		fd[2];
-	t_token	*tok;
+	t_token *tok;
 	char	**cmd;
-	int		std_fd;
-	t_list  *env;
-	
+	t_list	*env;
+
 	env = get_all_variable(envp);
 	tok = full_tokenization(command);
-	std_fd = get_stdin_fd(envp);
-	fd[0] = open_inputs(-2, tok, std_fd);
-	if (fd[0] == -1)
-		return (-1);
-	fd[1] = open_outputs(-2, tok);
-	if (fd[1] == -1)
-	{
-		close(fd[0]);
-		return (-1);
-	}
+	fd[0] = open_inputs(-2, tok, descriptor);
+	fd[1] = open_outputs(-2, tok, descriptor);
 	cmd = ultimate_get_argument(tok, env);
 	execve_inout(fd[0], fd[1], cmd, envp);
-	close(fd[0]);
-	close(fd[1]);
+	if (fd[0] >= 0 && fd[0] != STDIN_FILENO)
+		close(fd[0]);
+	if (fd[1] >= 0 && fd[1] != STDOUT_FILENO)
+		close(fd[1]);
+	ft_tabfree(cmd);
 	free_token(tok);
-	return (0);
+	ft_lstclear(&env, &free_variable);
+	return (-1);
 }
 
-int	execve_parent(char *command, char **envp, int fd[])
+void	close_pipe(int fd[])
 {
-	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
 	close(fd[1]);
-	return (execve_cmd(command, envp));
 }
 
-int	execve_pipe(t_node *root, char **envp)
+int	get_status_code(int id[], int fd[])
+{
+	int	status;
+
+	close_pipe(fd);
+	waitpid(id[1], &status, 0);
+	waitpid(id[0], NULL, 0);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	else
+		return (-1);
+}
+
+int	execve_pipe(t_node *root, char **envp, int descriptor[])
 {
 	int	fd[2];
-	int	id;
+	int	id[2];
 
-	if (root == NULL)
-		return (-1);
 	if (root->str == NULL)
 	{
 		if (pipe(fd) == -1)
-		{
-			perror("minishell");
 			return (-1);
-		}
-		id = fork();
-		if (id == 0)
+		id[0] = fork();
+		if (id[0] == 0) // in child left
 		{
 			dup2(fd[1], STDOUT_FILENO);
-			close(fd[1]);
-			close(fd[0]);
-			return (execve_pipe(root->left, envp));
+			close_pipe(fd);
+			execve_pipe(root->left, envp, descriptor);
+		}
+		id[1] = fork();
+		if (id[1] == 0) // in child right
+		{
+			dup2(fd[0], STDIN_FILENO);
+			close_pipe(fd);
+			execve_pipe(root->right, envp, descriptor);
 		}
 		else
-		{
-			wait(NULL);
-			return (execve_parent(root->right->str, envp, fd));
-		}
+			return (get_status_code(id, fd));
+		return (-1);
 	}
 	else
-		return (execve_cmd(root->str, envp));
+		return (execve_cmd(root->str, envp, descriptor));
+}
+
+int	ultimate_execve(char *command, char **envp)
+{
+	int		id;
+	int		*descriptor;
+	char	**tmp;
+	char	**env;
+	t_node	*root;
+
+	tmp = ft_tabdup(envp);
+	env = add_stdinout_fd(tmp);
+	free(tmp);
+	root = ft_create_tree(command);
+	descriptor = manage_heredoc(root);
+	id = fork();
+	if (id == 0)
+		execve_pipe(root, env, descriptor);
+	else
+		wait(NULL);
+	ft_tabfree(env);
+	ft_free_tree(root);
+	if (id == 0)
+		return (-1);
+	return (0);
 }
 
 int	main(int n, char *vector[], char *envp[])
 {
 	if (n != 2)
 		return (-1);
-	char	**env;
-	char	**tmp;
-	t_node	*root;
-
-	tmp = ft_tabdup(envp);
-	env = add_stdin_fd(tmp);
-	free(tmp);
-	root = ft_create_tree(vector[1]);
-	execve_pipe(root, env);
-	ft_free_tree(root);
+	ultimate_execve(vector[1], envp);
 	return (0);
 }

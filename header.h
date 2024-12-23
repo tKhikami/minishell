@@ -70,13 +70,24 @@ char	**ultimate_get_argument(t_token *tok, t_list *env);
 /**************** EXECUTION ****************/
 
 int		get_stdin_fd(char **envp);
+int		get_stdout_fd(char **envp);
 char	*dup_stdin_fd(int *std_fd);
-char	**add_stdin_fd(char **envp);
+char	*dup_stdout_fd(int *std_fd);
+char	**add_stdinout_fd(char **envp);
 char	*path_valid(char *path);
 char	*path_exist(char *executable, t_list *env);
-int		open_file(t_token *tmp, int std_fd);
-int		open_outputs(int fd, t_token *tok);
-int		open_inputs(int fd, t_token *tok, int std_fd);
+int		open_file(t_token *tmp, int descriptor[]);
+int		open_outputs(int fd, t_token *tok, int descriptor[]);
+int		open_inputs(int fd, t_token *tok, int descriptor[]);
 int		execve_inout(int in, int out, char **com, char **envp);
+
+/***************** HEREDOC ******************/
+
+int		open_heredoc(t_token *tmp);
+void	clear_tok(t_token *head);
+int		check_heredoc(t_node *node);
+int		nbr_heredoc(t_node *node);
+int		set_heredoc(t_node *node, int *hd, int *index);
+int		*manage_heredoc(t_node *node);
 
 #endif

@@ -17,7 +17,20 @@ int	get_stdin_fd(char **envp)
 	char	*str;
 	int		std_fd;
 
-	str = variable_chr_tab("std_fd", envp);
+	str = variable_chr_tab("STDIN_FD", envp);
+	if (str == NULL)
+		return (-1);
+	std_fd = ft_atoi(str);
+	free(str);
+	return (std_fd);
+}
+
+int	get_stdout_fd(char **envp)
+{
+	char	*str;
+	int		std_fd;
+
+	str = variable_chr_tab("STDOUT_FD", envp);
 	if (str == NULL)
 		return (-1);
 	std_fd = ft_atoi(str);
@@ -39,11 +52,11 @@ char	*dup_stdin_fd(int *std_fd)
 		close(*std_fd);
 		return (NULL);
 	}
-	str = malloc(ft_strlen(tmp) + 8);
+	str = malloc(ft_strlen(tmp) + 10);
 	if (str != NULL)
 	{
-		ft_memmove(str, "std_fd=", 7);
-		ft_memmove(str + 7, (const void *)tmp, ft_strlen(tmp) + 1);
+		ft_memmove(str, "STDIN_FD=", 9);
+		ft_memmove(str + 9, (const void *)tmp, ft_strlen(tmp) + 1);
 	}
 	else
 		close(*std_fd);
@@ -51,28 +64,60 @@ char	*dup_stdin_fd(int *std_fd)
 	return (str);
 }
 
-char	**add_stdin_fd(char **envp)
+char	*dup_stdout_fd(int *std_fd)
 {
-	int		std_fd;
 	char	*tmp;
+	char	*str;
+
+	*std_fd = dup(STDOUT_FILENO);
+	if (*std_fd < 0)
+		return (NULL);
+	tmp = ft_itoa(*std_fd);
+	if (tmp == NULL)
+	{
+		close(*std_fd);
+		return (NULL);
+	}
+	str = malloc(ft_strlen(tmp) + 11);
+	if (str != NULL)
+	{
+		ft_memmove(str, "STDOUT_FD=", 10);
+		ft_memmove(str + 10, (const void *)tmp, ft_strlen(tmp) + 1);
+	}
+	else
+		close(*std_fd);
+	free(tmp);
+	return (str);
+}
+
+char	**add_stdinout_fd(char **envp)
+{
+	int		std_fd[2];
+	char	*tmp[2];
 	char	**tab;
 	char	**ret;
 
-	tmp = dup_stdin_fd(&std_fd);
-	if (tmp == NULL)
+	tmp[0] = dup_stdin_fd(&std_fd[0]);
+	tmp[1] = dup_stdout_fd(&std_fd[1]);
+	if (tmp[0] == NULL || tmp[1] == NULL)
+	{
+		free(tmp[0]);
+		free(tmp[1]);
 		return (NULL);
-	tab = malloc(sizeof(char *) * 2);
+	}
+	tab = malloc(sizeof(char *) * 3);
 	ret = NULL;
 	if (tab != NULL)
 	{
-		tab[0] = tmp;
-		tab[1] = NULL;
+		tab[0] = tmp[0];
+		tab[1] = tmp[1];
+		tab[2] = NULL;
 		ret = ft_concatenate_tab(envp, tab);
 	}
 	if (ret == NULL)
 	{
-		close(std_fd);
-		free(tmp);
+		close(std_fd[0]);
+		close(std_fd[1]);
 	}
 	free(tab);
 	return (ret);
@@ -127,7 +172,7 @@ char	*mini_readline(char *prompt, int fd)
 	return (str);
 }
 
-int	open_heredoc(t_token *tmp, int std_fd)
+int	open_heredoc(t_token *tmp)
 {
 	int		fd[2];
 	char	*str;
@@ -140,7 +185,7 @@ int	open_heredoc(t_token *tmp, int std_fd)
 	while (ft_strcmp(str, doc) != 0)
 	{
 		free(str);
-		str = mini_readline("> ", std_fd);
+		str = mini_readline("> ", STDIN_FILENO);
 		if (ft_strcmp(str, doc) == 0 || ft_strcmp(str, doc) == 2000000000)
 			break ;
 		ft_putendl_fd(str, fd[1]);
@@ -156,9 +201,10 @@ int	open_heredoc(t_token *tmp, int std_fd)
 	return (fd[0]);
 }
 
-int	open_file(t_token *tmp, int std_fd)
+int	open_file(t_token *tmp, int descriptor[])
 {
-	int	fd;
+	int			fd;
+	static int	i;
 
 	if (tmp->type == normal_input)
 		fd = open(tmp->tok, O_RDONLY, 0644);
@@ -167,7 +213,10 @@ int	open_file(t_token *tmp, int std_fd)
 	else if (tmp->type == append_output)
 		fd = open(tmp->tok, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else if (tmp->type == delim_input)
-		fd = open_heredoc(tmp, std_fd);
+	{
+		fd = descriptor[i];
+		i++;
+	}
 	else
 		fd = -1;
 	if (fd == -1)
@@ -179,7 +228,7 @@ int	open_file(t_token *tmp, int std_fd)
 		return (fd);
 }
 
-int	open_outputs(int fd, t_token *tok)
+int	open_outputs(int fd, t_token *tok, int descriptor[])
 {
 	int	fd_tmp;
 
@@ -190,12 +239,12 @@ int	open_outputs(int fd, t_token *tok)
 	if (fd == -2)
 	{
 		if (tok->type == normal_output || tok->type == append_output)
-			fd = open_file(tok, 1);
-		return (open_outputs(fd, tok->next));
+			fd = open_file(tok, descriptor);
+		return (open_outputs(fd, tok->next, descriptor));
 	}
 	if (tok->type == normal_output || tok->type == append_output)
 	{
-		fd_tmp = open_file(tok, 1);
+		fd_tmp = open_file(tok, descriptor);
 		if (fd_tmp == -1)
 		{
 			close(fd);
@@ -204,10 +253,10 @@ int	open_outputs(int fd, t_token *tok)
 		dup2(fd_tmp, fd);
 		close(fd_tmp);
 	}
-	return (open_outputs(fd, tok->next));
+	return (open_outputs(fd, tok->next, descriptor));
 }
 
-int	open_inputs(int fd, t_token *tok, int std_fd)
+int	open_inputs(int fd, t_token *tok, int descriptor[])
 {
 	int	fd_tmp;
 
@@ -218,23 +267,22 @@ int	open_inputs(int fd, t_token *tok, int std_fd)
 	if (fd == -2)
 	{
 		if (tok->type == normal_input || tok->type == delim_input)
-			fd = open_file(tok, std_fd);
-		return (open_inputs(fd, tok->next, std_fd));
+			fd = open_file(tok, descriptor);
+		return (open_inputs(fd, tok->next, descriptor));
 	}
 	if (tok->type == normal_input || tok->type == delim_input)
 	{
-		fd_tmp = open_file(tok, std_fd);
+		fd_tmp = open_file(tok, descriptor);
 		close (fd);
 		if (fd_tmp == -1)
 			return (-1);
 		fd = fd_tmp;
 	}
-	return (open_inputs(fd, tok->next, std_fd));
+	return (open_inputs(fd, tok->next, descriptor));
 }
 
 int	execve_inout(int in, int out, char **com, char **envp)
 {
-	int		id;
 	char	*path;
 	t_list	*env;
 
@@ -245,18 +293,11 @@ int	execve_inout(int in, int out, char **com, char **envp)
 	ft_lstclear(&env, &free_variable);
 	if (path == NULL)
 		return (-1);
-	id = fork();
-	if (id == 0)
-	{
+	if (in >= 0)
 		dup2(in, STDIN_FILENO);
+	if (out >= 0)
 		dup2(out, STDOUT_FILENO);
-		if (execve(path, com, envp) == -1)
-		{
-			perror("execve");
-			return (-1);
-		}
-	}
-	wait(NULL);
+	execve(path, com, envp);
 	free(path);
-	return (0);
+	return (-1);
 }

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/20 09:01:48 by atolojan          #+#    #+#             */
-/*   Updated: 2024/12/15 18:01:52 by nyrandri         ###   ########.fr       */
+/*   Created: 2024/12/09 11:01:10 by nyrandri          #+#    #+#             */
+/*   Updated: 2024/12/23 13:38:26 by nyrandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int			ft_is_inner_quote(char *str, char *to_compare);
 int			ft_is_in_set(char *set, char c);
 void		handle_signals(int sig);
 char		*ft_substrchr(char *s1, char *s2);
-char		*ft_reverse_strtok(char *str, char *delims, \
+char		*my_strtok(char *str, char *delims, \
 		int (*ignore)(char *, char *));
 t_token		*full_tokenization(char *str);
 int			check_builtins(char *str, t_list *envp);

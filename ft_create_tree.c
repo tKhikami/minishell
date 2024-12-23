@@ -29,8 +29,8 @@ void	ft_branching(t_node *node)
 
 	if (node != NULL)
 	{
-		tmp = ft_reverse_strtok(node->str, PIPE, &ft_is_inner_quote);
-		if (tmp == node->str)
+		tmp = my_strtok(node->str, PIPE, &ft_is_inner_quote);
+		if (tmp == NULL || tmp == node->str)
 			return ;
 		node->left = ft_create_node(node->str);
 		node->right = ft_create_node(tmp);

@@ -10,7 +10,7 @@ SRC = main.c \
 	  signals.c \
 	  ft_isnumber.c \
 	  builtins.c \
-	  ft_reverse_strtok.c \
+	  my_strtok.c \
 	  ft_substrchr.c \
 	  ft_print_tree.c \
 	  ft_nodeiter.c \
@@ -31,7 +31,8 @@ SRC = main.c \
 	  execution.c \
 	  redirections.c \
 	  get_next_line.c \
-	  get_next_line_utils.c
+	  get_next_line_utils.c \
+	  set_heredoc.c
 
 OBJ = $(SRC:.c=.o)
 
