@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	ft_print_tab(const char **tab)
+int	ft_print_tab(char **tab)
 {
 	int	i;
 	int	length;
