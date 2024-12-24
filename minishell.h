@@ -6,7 +6,7 @@
 /*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 11:01:10 by nyrandri          #+#    #+#             */
-/*   Updated: 2024/12/23 13:38:26 by nyrandri         ###   ########.fr       */
+/*   Updated: 2024/12/24 14:25:14 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ t_list		*get_all_variable(char **str);
 /******************* BUILTIN COMMAD *****************/
 
 int			ft_builtin_cmd(const char **tab, t_list *envp);
+int			is_builtin(char *cmd);
 int			ft_cd(const char *path);
 int			ft_pwd(char *tab);
 int			ft_echo(const char **tab);

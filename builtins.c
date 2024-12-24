@@ -402,24 +402,3 @@ int	ft_export(t_list **exp, char *str)
 	handle_export(exp, str_splitted, 0);
 	return (0);
 }
-
-int	ft_builtin_cmd(const char **tab, t_list *envp)
-{
-	(void)envp;
-	if (tab != NULL)
-	{
-		if (ft_memcmp(tab[0], "echo", 5) == 0)
-			return (ft_echo(tab));
-		else if (ft_memcmp(tab[0], "exit", 5) == 0)
-			return (ft_exit(tab));
-		else if (ft_memcmp(tab[0], "cd", 3) == 0)
-			return (ft_cd((const char *)tab[1]));
-		else if (ft_memcmp(tab[0], "pwd", 4) == 0)
-			return (ft_pwd((char *)tab[1]));
-		/*else if (ft_memcmp(tab[0], "export", 7) == 0)
-			return (ft_export((char *)tab[1], envp));
-		else if (ft_memcmp(tab[0], "env", 4) == 0)
-			return (ft_env(envp));*/
-	}
-	return (-1);
-}

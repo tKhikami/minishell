@@ -10,6 +10,7 @@ SRC = main.c \
 	  signals.c \
 	  ft_isnumber.c \
 	  builtins.c \
+	  ft_builtin_cmd.c \
 	  my_strtok.c \
 	  ft_substrchr.c \
 	  ft_print_tree.c \
