@@ -9,7 +9,14 @@ SRC = main.c \
 	  ft_strtok.c \
 	  signals.c \
 	  ft_isnumber.c \
-	  builtins.c \
+	  ft_cd.c \
+	  ft_echo.c \
+	  ft_env.c \
+	  ft_env_utils.c \
+	  ft_exit.c \
+	  ft_export.c \
+	  ft_pwd.c \
+	  ft_unset.c \
 	  ft_builtin_cmd.c \
 	  my_strtok.c \
 	  ft_substrchr.c \
@@ -33,7 +40,8 @@ SRC = main.c \
 	  redirections.c \
 	  get_next_line.c \
 	  get_next_line_utils.c \
-	  set_heredoc.c
+	  set_heredoc.c \
+	  exit_status.c
 
 OBJ = $(SRC:.c=.o)
 

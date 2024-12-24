@@ -87,7 +87,7 @@ int		open_heredoc(t_token *tmp);
 void	clear_tok(t_token *head);
 int		check_heredoc(t_node *node);
 int		nbr_heredoc(t_node *node);
-int		set_heredoc(t_node *node, int *hd, int *index);
+int		set_heredoc(t_node *node);
 int		*manage_heredoc(t_node *node);
 
 #endif

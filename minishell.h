@@ -6,7 +6,7 @@
 /*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 11:01:10 by nyrandri          #+#    #+#             */
-/*   Updated: 2024/12/24 14:25:14 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/12/24 16:38:11 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,14 @@ typedef struct s_assign
 typedef struct s_node
 {
 	char			*str;
+	int				*heredoc;
 	struct s_node	*left;
 	struct s_node	*right;
 }	t_node;
 
 /************************ TOOLS *********************/
 
-int			ft_print_tab(const char **tab);
+int			ft_print_tab(char **tab);
 int			ft_isnumber(const char *number);
 int			ft_is_inner_quote(char *str, char *to_compare);
 int			ft_is_in_set(char *set, char c);
@@ -75,29 +76,35 @@ char		**ft_lsttotab(t_list *lst);
 void		ft_lstfree(t_list **lst);
 char		**ft_split_ignore_quote(char *str, char c);
 char		**split_ignore_quote(char const *s, char c);
-void		env_to_tlist(t_list **envp, char *env[], int count);
+int			env_to_tlist(t_list **envp, char *env[], int count);
 int			is_an_assignment(char *str);
 void		print_content(void *content);
 int			ft_is_whitespace(char c);
-void		handle_export(t_list **exp, char **s, int i);
+int			handle_export(t_list **exp, char **s, int i);
 char		*search_value(t_list *exp, char *str);
 t_assign	*extract_assign(char *str);
 void		remove_assign(t_assign *assign);
 t_list		*get_all_variable(char **str);
 
+void		free_variable(void *var);
+char		*dollar_expand(t_list *env, char *str);
+void		clear_tok(t_token *head);
+t_list		*make_sort_list(t_list **envp);
+void		sort_list(t_list **sorted);
+char		*get_var_name(t_assign *assign, char *str, int begin, int len);
+int			export_print(t_list *envp, t_assign *ass, t_list *tmp);
+
 /******************* BUILTIN COMMAD *****************/
 
-int			ft_builtin_cmd(const char **tab, t_list *envp);
+int			ft_builtin_cmd(char **tab, t_list *envp);
 int			is_builtin(char *cmd);
 int			ft_cd(const char *path);
 int			ft_pwd(char *tab);
-int			ft_echo(const char **tab);
+int			ft_echo(char **tab);
 int			ft_export(t_list **exp, char *str);
 int			ft_env(t_list *envp, int sorted);
-int			ft_cd(const char *path);
-int			ft_pwd(char *tab);
-int			ft_echo(const char **tab);
 int			ft_unset(t_list **env, char *str);
+int			ft_exit(const char **tab);
 
 /***************** TREE MANIPULATION ****************/
 

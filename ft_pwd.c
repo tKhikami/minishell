@@ -1,32 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_builtins.c                                   :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/08 08:31:13 by atolojan          #+#    #+#             */
-/*   Updated: 2024/12/17 14:38:39 by atolojan         ###   ########.fr       */
+/*   Created: 2024/12/16 15:57:25 by atolojan          #+#    #+#             */
+/*   Updated: 2024/12/20 08:32:56 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_builtins(char *str, t_list *envp)
+int	ft_pwd(char *tab)
 {
-	char	**splitted;
+	char	path[100];
 
-	(void)envp;
-	splitted = split_ignore_quote((const char *)str, 32);
-	if (!ft_memcmp(splitted[0], "echo", 5) \
-			|| !ft_memcmp(splitted[0], "exit", 5) \
-			|| !ft_memcmp(splitted[0], "cd", 3) \
-			|| !ft_memcmp(splitted[0], "pwd", 4) \
-			|| !ft_memcmp(splitted[0], "env", 4) \
-			|| !ft_memcmp(splitted[0], "export", 7))
+	if (tab != NULL)
 	{
-		//ft_builtin_cmd((const char **)splitted, envp);
+		write(2, "pwd: too many arguments\n", 24);
 		return (0);
 	}
-	return (-1);
+	return (ft_printf("%s\n", getcwd(path, 100)));
 }

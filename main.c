@@ -54,7 +54,7 @@ int	get_status_code(int id[], int fd[])
 		return (-1);
 }
 
-int	execve_pipe(t_node *root, char **envp, int descriptor[])
+int	execve_pipe(t_node *root, char **envp)
 {
 	int	fd[2];
 	int	id[2];
@@ -68,27 +68,26 @@ int	execve_pipe(t_node *root, char **envp, int descriptor[])
 		{
 			dup2(fd[1], STDOUT_FILENO);
 			close_pipe(fd);
-			execve_pipe(root->left, envp, descriptor);
+			execve_pipe(root->left, envp);
 		}
 		id[1] = fork();
 		if (id[1] == 0) // in child right
 		{
 			dup2(fd[0], STDIN_FILENO);
 			close_pipe(fd);
-			execve_pipe(root->right, envp, descriptor);
+			execve_pipe(root->right, envp);
 		}
 		else
 			return (get_status_code(id, fd));
 		return (-1);
 	}
 	else
-		return (execve_cmd(root->str, envp, descriptor));
+		return (execve_cmd(root->str, envp, root->heredoc));
 }
 
 int	ultimate_execve(char *command, char **envp)
 {
 	int		id;
-	int		*descriptor;
 	char	**tmp;
 	char	**env;
 	t_node	*root;
@@ -97,10 +96,10 @@ int	ultimate_execve(char *command, char **envp)
 	env = add_stdinout_fd(tmp);
 	free(tmp);
 	root = ft_create_tree(command);
-	descriptor = manage_heredoc(root);
+	set_heredoc(root);
 	id = fork();
 	if (id == 0)
-		execve_pipe(root, env, descriptor);
+		execve_pipe(root, env);
 	else
 		wait(NULL);
 	ft_tabfree(env);

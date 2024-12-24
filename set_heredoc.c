@@ -6,7 +6,7 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 08:38:30 by atolojan          #+#    #+#             */
-/*   Updated: 2024/12/23 15:08:13 by nyrandri         ###   ########.fr       */
+/*   Updated: 2024/12/24 16:49:36 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,23 @@ int	nbr_heredoc(t_node *node)
 	return (hd);
 }
 
-int	set_heredoc(t_node *node, int *hd, int *index)
+int	set_heredoc(t_node *node)
 {
 	t_token	*tok;
 	t_token	*tmp;
 	char	*s;
+	int		nb_heredoc;
+	int		index;
 
+	index = 0;
+	if (node == NULL)
+		return (0);
 	if (node->str != NULL)
 	{
+		nb_heredoc = check_heredoc(node);
+		node->heredoc = malloc(sizeof(int) * (nb_heredoc + 1));
+		if (node->heredoc == NULL)
+			return (-1);
 		s = ft_strdup(node->str);
 		tok = full_tokenization(s);
 		tmp = tok;
@@ -76,23 +85,23 @@ int	set_heredoc(t_node *node, int *hd, int *index)
 		{
 			if (tmp->type == 3)
 			{
-				hd[*index] = open_heredoc(tmp);
-				(*index)++;
+				node->heredoc[index] = open_heredoc(tmp);
+				index++;
 			}
 			tmp = tmp->next;
 		}
-		if (tok)
-			clear_tok(tok);
+		node->heredoc[index] = -42;
+		clear_tok(tok);
 		free(s);
 	}
 	else
 	{
-		set_heredoc(node->left, hd, index);
-		set_heredoc(node->right, hd, index);
+		set_heredoc(node->left);
+		set_heredoc(node->right);
 	}
 	return (0);
 }
-
+/*
 int	*manage_heredoc(t_node *node)
 {
 	int	hd_count;
@@ -108,7 +117,7 @@ int	*manage_heredoc(t_node *node)
 	if (!heredoc)
 		return (NULL);
 	index = 0;
-	set_heredoc(node, heredoc, &index);
+	set_heredoc(node);
 	heredoc[hd_count] = -42;
 	return (heredoc);
-}
+}*/
