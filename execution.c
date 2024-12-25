@@ -12,117 +12,6 @@
 
 #include "header.h"
 
-int	get_stdin_fd(char **envp)
-{
-	char	*str;
-	int		std_fd;
-
-	str = variable_chr_tab("STDIN_FD", envp);
-	if (str == NULL)
-		return (-1);
-	std_fd = ft_atoi(str);
-	free(str);
-	return (std_fd);
-}
-
-int	get_stdout_fd(char **envp)
-{
-	char	*str;
-	int		std_fd;
-
-	str = variable_chr_tab("STDOUT_FD", envp);
-	if (str == NULL)
-		return (-1);
-	std_fd = ft_atoi(str);
-	free(str);
-	return (std_fd);
-}
-
-char	*dup_stdin_fd(int *std_fd)
-{
-	char	*tmp;
-	char	*str;
-
-	*std_fd = dup(STDIN_FILENO);
-	if (*std_fd < 0)
-		return (NULL);
-	tmp = ft_itoa(*std_fd);
-	if (tmp == NULL)
-	{
-		close(*std_fd);
-		return (NULL);
-	}
-	str = malloc(ft_strlen(tmp) + 10);
-	if (str != NULL)
-	{
-		ft_memmove(str, "STDIN_FD=", 9);
-		ft_memmove(str + 9, (const void *)tmp, ft_strlen(tmp) + 1);
-	}
-	else
-		close(*std_fd);
-	free(tmp);
-	return (str);
-}
-
-char	*dup_stdout_fd(int *std_fd)
-{
-	char	*tmp;
-	char	*str;
-
-	*std_fd = dup(STDOUT_FILENO);
-	if (*std_fd < 0)
-		return (NULL);
-	tmp = ft_itoa(*std_fd);
-	if (tmp == NULL)
-	{
-		close(*std_fd);
-		return (NULL);
-	}
-	str = malloc(ft_strlen(tmp) + 11);
-	if (str != NULL)
-	{
-		ft_memmove(str, "STDOUT_FD=", 10);
-		ft_memmove(str + 10, (const void *)tmp, ft_strlen(tmp) + 1);
-	}
-	else
-		close(*std_fd);
-	free(tmp);
-	return (str);
-}
-
-char	**add_stdinout_fd(char **envp)
-{
-	int		std_fd[2];
-	char	*tmp[2];
-	char	**tab;
-	char	**ret;
-
-	tmp[0] = dup_stdin_fd(&std_fd[0]);
-	tmp[1] = dup_stdout_fd(&std_fd[1]);
-	if (tmp[0] == NULL || tmp[1] == NULL)
-	{
-		free(tmp[0]);
-		free(tmp[1]);
-		return (NULL);
-	}
-	tab = malloc(sizeof(char *) * 3);
-	ret = NULL;
-	if (tab != NULL)
-	{
-		tab[0] = tmp[0];
-		tab[1] = tmp[1];
-		tab[2] = NULL;
-		ret = ft_concatenate_tab(envp, tab);
-	}
-	if (ret == NULL)
-	{
-		close(std_fd[0]);
-		close(std_fd[1]);
-	}
-	free(tab);
-	return (ret);
-}
-
 char	*path_valid(char *path)
 {
 	if (path == NULL)
@@ -159,7 +48,36 @@ char	*path_exist(char *executable, t_list *env)
 		else
 			return (ptr);
 	}
+	perror("minishell");
 	return (ptr);
+}
+
+int	is_absolute_path(char *executable)
+{
+	if (executable == NULL)
+		return (-1);
+	if (executable[0] == '/')
+		return (1);
+	else
+		return (0);
+}
+
+char	*get_path(char *executable, char **envp)
+{
+	char	*tmp;
+	t_list	*env;
+	char	*path;
+
+	env = get_all_variable(envp);
+	if (env == NULL)
+		return (NULL);
+	tmp = variable_chr_tab("PATH", envp);
+	if (tmp == NULL || is_absolute_path(executable))
+		path = path_valid(executable);
+	else
+		path = path_exist(executable, env);
+	ft_lstclear(&env, &free_variable);
+	return (path);
 }
 
 char	*mini_readline(char *prompt, int fd)
@@ -284,19 +202,18 @@ int	open_inputs(int fd, t_token *tok, int descriptor[])
 int	execve_inout(int in, int out, char **com, char **envp)
 {
 	char	*path;
-	t_list	*env;
 
 	if (com == NULL)
 		return (-1);
-	env = get_all_variable(envp);
-	path = path_exist(com[0], env);
-	ft_lstclear(&env, &free_variable);
+	path = get_path(com[0], envp);
 	if (path == NULL)
 		return (-1);
 	if (in >= 0)
 		dup2(in, STDIN_FILENO);
 	if (out >= 0)
 		dup2(out, STDOUT_FILENO);
+	if (path == NULL)
+		return(-1);
 	execve(path, com, envp);
 	free(path);
 	return (-1);

@@ -69,13 +69,10 @@ char	**ultimate_get_argument(t_token *tok, t_list *env);
 
 /**************** EXECUTION ****************/
 
-int		get_stdin_fd(char **envp);
-int		get_stdout_fd(char **envp);
-char	*dup_stdin_fd(int *std_fd);
-char	*dup_stdout_fd(int *std_fd);
-char	**add_stdinout_fd(char **envp);
 char	*path_valid(char *path);
 char	*path_exist(char *executable, t_list *env);
+int		is_absolute_path(char *executable);
+char	*get_path(char *executable, char **envp);
 int		open_file(t_token *tmp, int descriptor[]);
 int		open_outputs(int fd, t_token *tok, int descriptor[]);
 int		open_inputs(int fd, t_token *tok, int descriptor[]);
