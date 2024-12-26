@@ -22,12 +22,12 @@ int	is_builtin(char *cmd)
 			|| !ft_memcmp(cmd, "unset", 6) \
 			|| !ft_memcmp(cmd, "export", 7))
 	{
-		return (0);
+		return (1);
 	}
-	return (1);
+	return (0);
 }
 
-int ft_builtin_cmd(char **tab, t_list *env)
+int execve_builtin(char **tab, t_list *env)
 {
 	if (tab != NULL)
 	{

@@ -204,16 +204,25 @@ int	open_inputs(int fd, t_token *tok, int descriptor[])
 int	execve_inout(int in, int out, char **com, char **envp)
 {
 	char	*path;
+	t_list	*env;
+	int		built;
 
+	env = NULL;
+	built = -1;
 	if (com == NULL)
-		return (-1);
-	path = get_path(com[0], envp);
-	if (path == NULL)
 		return (-1);
 	if (in >= 0)
 		dup2(in, STDIN_FILENO);
 	if (out >= 0)
 		dup2(out, STDOUT_FILENO);
+	if (is_builtin(com[0]))
+	{
+		env_to_tlist(&env, envp, -1);
+		built = execve_builtin(com, env);
+		ft_lstclear(&env, free);
+		return (built);
+	}
+	path = get_path(com[0], envp);
 	if (path == NULL)
 		return(-1);
 	execve(path, com, envp);
