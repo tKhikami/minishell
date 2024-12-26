@@ -6,7 +6,7 @@
 /*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 11:01:10 by nyrandri          #+#    #+#             */
-/*   Updated: 2024/12/26 10:54:29 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/12/26 13:45:55 by nyrandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,6 @@ char		*get_variable(char *str, t_list *env);
 
 /********************  KERNEL  **********************/
 
-void		get_line(int *exit_status, char *env[]);
+void		get_line(char *envp[]);
 
 #endif

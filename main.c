@@ -143,7 +143,11 @@ int	ultimate_execve(char *command, char **envp)
 	}
 	root = ft_create_tree(command);
 	set_heredoc(root);
-	execve_pipe(root, env);
+	id = fork();
+	if (id == 0)
+		execve_pipe(root, env);
+	else
+		wait(NULL);
 	ft_tabfree(env);
 	ft_free_tree(root);
 	return (0);
@@ -151,8 +155,12 @@ int	ultimate_execve(char *command, char **envp)
 
 int	main(int n, char *vector[], char *envp[])
 {
-	if (n != 2)
+	if (n != 1)
 		return (-1);
+	(void)vector;
+	signal(SIGINT, &handle_signals);
+	signal(SIGQUIT, &handle_signals);
+	get_line(envp);
 	ultimate_execve(vector[1], envp);
 	return (0);
 }

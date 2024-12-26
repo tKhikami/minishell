@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+
 /*																			  */
 /*														  :::	   ::::::::   */
 /*	 get_line.c											:+:		 :+:	:+:   */
@@ -12,20 +12,17 @@
 
 #include "header.h"
 
-void	get_line(int *exit_status, char *envp[])
+void	get_line(char *envp[])
 {
 	char	*str;
-	t_list	*envar;
 
-	envar = NULL;
-	(void)exit_status;
-	(void)envp;
 	while (1)
 	{
 		str = readline("$>");
 		if (str != NULL)
 		{
-			//*exit_status = exec_ult(str, envp);
+			ultimate_execve(str, envp);
+			free(str);
 		}
 		else
 		{

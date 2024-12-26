@@ -76,6 +76,7 @@ int		open_file(t_token *tmp, int descriptor[]);
 int		open_outputs(int fd, t_token *tok, int descriptor[]);
 int		open_inputs(int fd, t_token *tok, int descriptor[]);
 int		execve_inout(int in, int out, char **com, char **envp);
+int		ultimate_execve(char *command, char **envp);
 
 /***************** HEREDOC ******************/
 
