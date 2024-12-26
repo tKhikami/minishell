@@ -27,7 +27,6 @@ SRC = main.c \
 	  ft_free_tree.c \
 	  ft_is_in_set.c \
 	  tokenization.c \
-	  check_builtins.c \
 	  ft_split_ignore_quote.c \
 	  split_ignore_quote.c \
 	  ft_is_whitespace.c \
