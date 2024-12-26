@@ -64,14 +64,14 @@ int	execve_pipe(t_node *root, char **envp)
 		if (pipe(fd) == -1)
 			return (-1);
 		id[0] = fork();
-		if (id[0] == 0) // in child left
+		if (id[0] == 0)
 		{
 			dup2(fd[1], STDOUT_FILENO);
 			close_pipe(fd);
 			execve_pipe(root->left, envp);
 		}
 		id[1] = fork();
-		if (id[1] == 0) // in child right
+		if (id[1] == 0)
 		{
 			dup2(fd[0], STDIN_FILENO);
 			close_pipe(fd);
@@ -85,12 +85,62 @@ int	execve_pipe(t_node *root, char **envp)
 		return (execve_cmd(root->str, envp, root->heredoc));
 }
 
+int	has_pipe(char *cmd)
+{
+	int	i;
+
+	i = 0;
+	if (!cmd)
+		return (0);
+	while (cmd[i] != '\0')
+	{
+		if (cmd[i] == '|' && !ft_is_inner_quote(cmd, &cmd[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	lonely_builtin(char *cmd, char **envp)
+{
+	t_list	*env;
+	t_token	*tok;
+	char	**command;
+	char	*dup;
+	int		is_lonely;
+
+	is_lonely = 0;
+	if (!cmd)
+		return (0);
+	dup = ft_strdup(cmd);
+	if (!dup)
+		return (0);
+	tok = full_tokenization(dup);
+	env = get_all_variable(envp);
+	command = ultimate_get_argument(tok, env);
+	if (is_builtin(command[0]))
+		is_lonely = 1;
+	ft_tabfree(command);
+	ft_lstclear(&env, free);
+	free(env);
+	clear_tok(tok);
+	free(dup);
+	return (is_lonely);
+}
+
 int	ultimate_execve(char *command, char **envp)
 {
 	char	**env;
 	t_node	*root;
+	int		fd[1];
 
+	fd[0] = -42;
 	env = ft_tabdup(envp);
+	if (!has_pipe(command) && lonely_builtin(command, envp))
+	{
+		execve_cmd(command, envp, fd);
+		return (0);
+	}
 	root = ft_create_tree(command);
 	set_heredoc(root);
 	execve_pipe(root, env);
