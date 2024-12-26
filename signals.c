@@ -6,7 +6,7 @@
 /*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 07:07:22 by nyrandri          #+#    #+#             */
-/*   Updated: 2024/12/09 10:17:52 by nyrandri         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:41:55 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	handle_signals(int sig)
 {
-	if (sig == SIGINT)
+	/*if (sig == SIGINT)
 	{
 		ft_printf("\n");
 		rl_on_new_line();
@@ -25,5 +25,11 @@ void	handle_signals(int sig)
 	{
 		rl_on_new_line();
 		rl_redisplay();
+	}*/
+	if (sig == SIGINT)
+	{
+		rl_replace_line("", 0);
+		write(STDOUT_FILENO, "\n$>", 3);
+		rl_on_new_line();
 	}
 }

@@ -35,6 +35,18 @@ int	execve_cmd(char *command, char **envp, int descriptor[])
 	return (-1);
 }
 
+void	setup_signals_parent(void)
+{
+	signal(SIGINT, handle_signals);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	setup_signals_children(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+}
+
 void	close_pipe(int fd[])
 {
 	close(fd[0]);
@@ -44,14 +56,20 @@ void	close_pipe(int fd[])
 int	get_status_code(int id[], int fd[])
 {
 	int	status;
+	int	result;
 
+	result = 0;
 	close_pipe(fd);
-	waitpid(id[1], &status, 0);
+	if (waitpid(id[1], &status, 0) > 0)
+	{
+		if (WIFEXITED(status))
+			result = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			result = WTERMSIG(status) + 128;
+	}
 	waitpid(id[0], NULL, 0);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	else
-		return (-1);
+	setup_signals_parent();
+	return (result);
 }
 
 int	execve_pipe(t_node *root, char **envp)
@@ -63,9 +81,12 @@ int	execve_pipe(t_node *root, char **envp)
 	{
 		if (pipe(fd) == -1)
 			return (-1);
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 		id[0] = fork();
 		if (id[0] == 0)
 		{
+			setup_signals_children();
 			dup2(fd[1], STDOUT_FILENO);
 			close_pipe(fd);
 			execve_pipe(root->left, envp);
@@ -73,13 +94,13 @@ int	execve_pipe(t_node *root, char **envp)
 		id[1] = fork();
 		if (id[1] == 0)
 		{
+			setup_signals_children();
 			dup2(fd[0], STDIN_FILENO);
 			close_pipe(fd);
 			execve_pipe(root->right, envp);
 		}
-		else
-			return (get_status_code(id, fd));
-		return (-1);
+		return (get_status_code(id, fd));
+		//return (-1);
 	}
 	else
 		return (execve_cmd(root->str, envp, root->heredoc));
@@ -110,7 +131,7 @@ int	lonely_builtin(char *cmd, char **envp)
 	int		is_lonely;
 
 	is_lonely = 0;
-	if (!cmd)
+	if (!cmd || cmd[0] == '\0')
 		return (0);
 	dup = ft_strdup(cmd);
 	if (!dup)
@@ -133,6 +154,7 @@ int	ultimate_execve(char *command, char **envp)
 	char	**env;
 	t_node	*root;
 	int		fd[1];
+	int		id;
 
 	fd[0] = -42;
 	env = ft_tabdup(envp);
@@ -145,7 +167,13 @@ int	ultimate_execve(char *command, char **envp)
 	set_heredoc(root);
 	id = fork();
 	if (id == 0)
+	{
+		setup_signals_children();
 		execve_pipe(root, env);
+		ft_free_tree(root);
+		ft_tabfree(env);
+		exit(0);
+	}
 	else
 		wait(NULL);
 	ft_tabfree(env);
@@ -158,9 +186,9 @@ int	main(int n, char *vector[], char *envp[])
 	if (n != 1)
 		return (-1);
 	(void)vector;
-	signal(SIGINT, &handle_signals);
-	signal(SIGQUIT, &handle_signals);
+	//signal(SIGINT, &handle_signals);
+	//signal(SIGQUIT, &handle_signals);
 	get_line(envp);
-	ultimate_execve(vector[1], envp);
+	//ultimate_execve(vector[1], envp);
 	return (0);
 }

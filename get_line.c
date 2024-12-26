@@ -18,6 +18,7 @@ void	get_line(char *envp[])
 
 	while (1)
 	{
+		setup_signals_parent();
 		str = readline("$>");
 		if (str != NULL)
 		{

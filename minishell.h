@@ -6,7 +6,7 @@
 /*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 11:01:10 by nyrandri          #+#    #+#             */
-/*   Updated: 2024/12/26 13:45:55 by nyrandri         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:21:02 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ void		check_redirections(char *str, char *envp[]);
 char		*path_exist(char *exec, t_list *env);
 char		**get_argument(t_token *tok, t_list *env);
 char		*get_variable(char *str, t_list *env);
+void		setup_signals_parent(void);
 
 /********************  KERNEL  **********************/
 
