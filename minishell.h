@@ -6,7 +6,7 @@
 /*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 11:01:10 by nyrandri          #+#    #+#             */
-/*   Updated: 2024/12/24 16:38:11 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/12/26 08:46:17 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int			is_builtin(char *cmd);
 int			ft_cd(const char *path);
 int			ft_pwd(char *tab);
 int			ft_echo(char **tab);
-int			ft_export(t_list **exp, char *str);
+int			ft_export(t_list **exp, char **str);
 int			ft_env(t_list *envp, int sorted);
 int			ft_unset(t_list **env, char *str);
 int			ft_exit(const char **tab);
