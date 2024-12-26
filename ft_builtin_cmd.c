@@ -40,7 +40,7 @@ int ft_builtin_cmd(char **tab, t_list *env)
 		else if (ft_memcmp(tab[0], "pwd", 4) == 0)
 			return (ft_pwd((char *)tab[1]));
 		else if (ft_memcmp(tab[0], "export", 7) == 0)
-			return (ft_export(&env, tab[1]));
+			return (ft_export(&env, &tab[0]));
 		else if (ft_memcmp(tab[0], "env", 4) == 0)
 			return (ft_env(env, 0));
 		else if (ft_memcmp(tab[0], "unset", 6) == 0)

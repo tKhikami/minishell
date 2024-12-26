@@ -6,7 +6,7 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 08:45:47 by atolojan          #+#    #+#             */
-/*   Updated: 2024/12/19 16:25:56 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/12/26 08:51:31 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,13 +107,8 @@ void	sort_list(t_list **sorted)
 	}
 }
 
-int	ft_export(t_list **exp, char *str)
+int	ft_export(t_list **exp, char **str)
 {
-	char	**str_splitted;
-
-	str_splitted = ft_split(str, 32);
-	if (!str_splitted)
-		return (1);
-	handle_export(exp, str_splitted, 0);
+	handle_export(exp, str, 0);
 	return (0);
 }
