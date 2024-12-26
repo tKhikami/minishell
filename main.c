@@ -87,22 +87,15 @@ int	execve_pipe(t_node *root, char **envp)
 
 int	ultimate_execve(char *command, char **envp)
 {
-	int		id;
 	char	**env;
 	t_node	*root;
 
 	env = ft_tabdup(envp);
 	root = ft_create_tree(command);
 	set_heredoc(root);
-	id = fork();
-	if (id == 0)
-		execve_pipe(root, env);
-	else
-		wait(NULL);
+	execve_pipe(root, env);
 	ft_tabfree(env);
 	ft_free_tree(root);
-	if (id == 0)
-		return (-1);
 	return (0);
 }
 
