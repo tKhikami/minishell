@@ -86,6 +86,8 @@ char	*mini_readline(char *prompt, int fd)
 
 	ft_putstr_fd(prompt, fd);
 	str = get_next_line(fd);
+	if (str == NULL)
+		return (NULL);
 	str[ft_strlen(str) - 1] = '\0';
 	return (str);
 }

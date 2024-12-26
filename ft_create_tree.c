@@ -18,6 +18,7 @@ t_node	*ft_create_node(char *str)
 
 	ret = malloc(sizeof(t_node));
 	ret->str = str;
+	ret->heredoc = NULL;
 	ret->left = NULL;
 	ret->right = NULL;
 	return (ret);

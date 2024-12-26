@@ -18,7 +18,6 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include "minishell.h"
-# include "get_next_line.h"
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <fcntl.h>
