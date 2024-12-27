@@ -86,5 +86,8 @@ int		check_heredoc(t_node *node);
 int		nbr_heredoc(t_node *node);
 int		set_heredoc(t_node *node);
 int		*manage_heredoc(t_node *node);
+void	setup_signals_children(void);
+int		set_heredoc_status(int set);
+void	get_heredoc_signal(void);
 
 #endif

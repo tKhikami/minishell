@@ -92,6 +92,25 @@ char	*mini_readline(char *prompt, int fd)
 	return (str);
 }
 
+int	set_heredoc_status(int set)
+{
+	static int	sig;
+
+	if (set != -1)
+		sig = set;
+	return (sig);
+}
+
+void	sig_heredoc(int sig)
+{
+	if (sig == SIGINT)
+	{
+		set_heredoc_status(130);
+		write(1, "\n", 1);
+		close(STDIN_FILENO);
+	}
+}
+
 int	open_heredoc(t_token *tmp)
 {
 	int		fd[2];
@@ -100,12 +119,29 @@ int	open_heredoc(t_token *tmp)
 
 	if (pipe(fd) == -1)
 		return (-1);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, sig_heredoc);
 	doc = ft_strtrim(tmp->tok, " ");
 	str = ft_strdup("");
 	while (ft_strcmp(str, doc) != 0)
 	{
 		free(str);
-		str = mini_readline("> ", STDIN_FILENO);
+		str = readline("> ");
+		if (set_heredoc_status(-1) == 130)
+		{
+			open("/dev/tty", O_RDONLY);
+			break ;
+		}
+		if (!str)
+		{
+			close(fd[1]);
+			ft_putstr_fd("warning: here-document at \
+				line 1 delimited by end-of-file (wanted `", 2);
+			ft_putstr_fd(doc, 2);
+			ft_putstr_fd("`)\n", 2);
+			free(doc);
+			return (fd[0]);
+		}
 		if (ft_strcmp(str, doc) == 0 || ft_strcmp(str, doc) == 2000000000)
 			break ;
 		ft_putendl_fd(str, fd[1]);
@@ -141,7 +177,7 @@ int	open_file(t_token *tmp, int descriptor[])
 		fd = -1;
 	if (fd == -1)
 	{
-		perror("minishell");
+		perror("file");
 		return (-1);
 	}
 	else

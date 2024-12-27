@@ -23,6 +23,12 @@ int	execve_cmd(char *command, char **envp, int descriptor[])
 	tok = full_tokenization(command);
 	fd[0] = open_inputs(-2, tok, descriptor);
 	fd[1] = open_outputs(-2, tok, descriptor);
+	if (fd[0] == -1 || fd[1] == -1)
+	{
+		free_token(tok);
+		ft_lstclear(&env, &free_variable);
+		return (-1);
+	}
 	cmd = ultimate_get_argument(tok, env);
 	execve_inout(fd[0], fd[1], cmd, envp);
 	if (fd[0] >= 0 && fd[0] != STDIN_FILENO)
@@ -100,7 +106,6 @@ int	execve_pipe(t_node *root, char **envp)
 			execve_pipe(root->right, envp);
 		}
 		return (get_status_code(id, fd));
-		//return (-1);
 	}
 	else
 		return (execve_cmd(root->str, envp, root->heredoc));
@@ -137,13 +142,30 @@ int	lonely_builtin(char *cmd, char **envp)
 	if (!dup)
 		return (0);
 	tok = full_tokenization(dup);
+	if (!tok)
+	{
+		free(dup);
+		return (0);
+	}
 	env = get_all_variable(envp);
+	if (!env)
+	{
+		free(dup);
+		clear_tok(tok);
+		return (0);
+	}
 	command = ultimate_get_argument(tok, env);
-	if (is_builtin(command[0]))
+	if (command && command[0] && is_builtin(command[0]))
 		is_lonely = 1;
+	else if (!command)
+	{
+		free(dup);
+		clear_tok(tok);
+		ft_lstclear(&env, free);
+		return (0);
+	}
 	ft_tabfree(command);
 	ft_lstclear(&env, free);
-	free(env);
 	clear_tok(tok);
 	free(dup);
 	return (is_lonely);
@@ -151,13 +173,13 @@ int	lonely_builtin(char *cmd, char **envp)
 
 int	ultimate_execve(char *command, char **envp)
 {
-	char	**env;
+	//char	**env;
 	t_node	*root;
 	int		fd[1];
 	int		id;
 
 	fd[0] = -42;
-	env = ft_tabdup(envp);
+	//env = ft_tabdup(envp);
 	if (!has_pipe(command) && lonely_builtin(command, envp))
 	{
 		execve_cmd(command, envp, fd);
@@ -165,18 +187,23 @@ int	ultimate_execve(char *command, char **envp)
 	}
 	root = ft_create_tree(command);
 	set_heredoc(root);
+	if (set_heredoc_status(-1) == 130)
+	{
+		set_heredoc_status(1);
+		return (0);
+	}
 	id = fork();
 	if (id == 0)
 	{
 		setup_signals_children();
-		execve_pipe(root, env);
+		execve_pipe(root, envp);
 		ft_free_tree(root);
-		ft_tabfree(env);
+		//ft_tabfree(env);
 		exit(0);
 	}
 	else
 		wait(NULL);
-	ft_tabfree(env);
+	//ft_tabfree(env);
 	ft_free_tree(root);
 	return (0);
 }
@@ -186,9 +213,6 @@ int	main(int n, char *vector[], char *envp[])
 	if (n != 1)
 		return (-1);
 	(void)vector;
-	//signal(SIGINT, &handle_signals);
-	//signal(SIGQUIT, &handle_signals);
 	get_line(envp);
-	//ultimate_execve(vector[1], envp);
 	return (0);
 }

@@ -14,15 +14,17 @@
 
 void	get_line(char *envp[])
 {
-	char	*str;
+	char		*str;
+	static char **test;
 
+	test = envp;
 	while (1)
 	{
 		setup_signals_parent();
 		str = readline("$>");
 		if (str != NULL)
 		{
-			ultimate_execve(str, envp);
+			ultimate_execve(str, test);
 			free(str);
 		}
 		else

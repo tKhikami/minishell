@@ -6,7 +6,7 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 08:38:30 by atolojan          #+#    #+#             */
-/*   Updated: 2024/12/24 16:49:36 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/12/27 14:49:19 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ int	set_heredoc(t_node *node)
 		tmp = tok;
 		while (tmp)
 		{
+			if (set_heredoc_status(-1) == 130)
+				break ;
 			if (tmp->type == 3)
 			{
 				node->heredoc[index] = open_heredoc(tmp);
@@ -101,23 +103,3 @@ int	set_heredoc(t_node *node)
 	}
 	return (0);
 }
-/*
-int	*manage_heredoc(t_node *node)
-{
-	int	hd_count;
-	int	*heredoc;
-	int	index;
-
-	if (!node)
-		return (NULL);
-	hd_count = nbr_heredoc(node);
-	if (hd_count == 0)
-		return (NULL);
-	heredoc = (int *) malloc(hd_count * sizeof(int) + 1);
-	if (!heredoc)
-		return (NULL);
-	index = 0;
-	set_heredoc(node);
-	heredoc[hd_count] = -42;
-	return (heredoc);
-}*/
