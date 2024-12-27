@@ -12,24 +12,21 @@
 
 #include "header.h"
 
-int	execve_cmd(char *command, char **envp, int descriptor[])
+int	execve_cmd(char *command, t_list *envp, int descriptor[])
 {
 	int		fd[2];
 	t_token *tok;
 	char	**cmd;
-	t_list	*env;
 
-	env = get_all_variable(envp);
 	tok = full_tokenization(command);
 	fd[0] = open_inputs(-2, tok, descriptor);
 	fd[1] = open_outputs(-2, tok, descriptor);
 	if (fd[0] == -1 || fd[1] == -1)
 	{
 		free_token(tok);
-		ft_lstclear(&env, &free_variable);
 		return (-1);
 	}
-	cmd = ultimate_get_argument(tok, env);
+	cmd = ultimate_get_argument(tok, envp);
 	execve_inout(fd[0], fd[1], cmd, envp);
 	if (fd[0] >= 0 && fd[0] != STDIN_FILENO)
 		close(fd[0]);
@@ -37,7 +34,6 @@ int	execve_cmd(char *command, char **envp, int descriptor[])
 		close(fd[1]);
 	ft_tabfree(cmd);
 	free_token(tok);
-	ft_lstclear(&env, &free_variable);
 	return (-1);
 }
 
@@ -78,7 +74,7 @@ int	get_status_code(int id[], int fd[])
 	return (result);
 }
 
-int	execve_pipe(t_node *root, char **envp)
+int	execve_pipe(t_node *root, t_list *envp)
 {
 	int	fd[2];
 	int	id[2];
@@ -127,9 +123,8 @@ int	has_pipe(char *cmd)
 	return (0);
 }
 
-int	lonely_builtin(char *cmd, char **envp)
+int	lonely_builtin(char *cmd, t_list *envp)
 {
-	t_list	*env;
 	t_token	*tok;
 	char	**command;
 	char	*dup;
@@ -147,42 +142,31 @@ int	lonely_builtin(char *cmd, char **envp)
 		free(dup);
 		return (0);
 	}
-	env = get_all_variable(envp);
-	if (!env)
-	{
-		free(dup);
-		clear_tok(tok);
-		return (0);
-	}
-	command = ultimate_get_argument(tok, env);
+	command = ultimate_get_argument(tok, envp);
 	if (command && command[0] && is_builtin(command[0]))
 		is_lonely = 1;
 	else if (!command)
 	{
 		free(dup);
 		clear_tok(tok);
-		ft_lstclear(&env, free);
 		return (0);
 	}
 	ft_tabfree(command);
-	ft_lstclear(&env, free);
 	clear_tok(tok);
 	free(dup);
 	return (is_lonely);
 }
 
-int	ultimate_execve(char *command, char **envp)
+int	ultimate_execve(char *command, t_list **envp)
 {
-	//char	**env;
 	t_node	*root;
 	int		fd[1];
 	int		id;
 
 	fd[0] = -42;
-	//env = ft_tabdup(envp);
-	if (!has_pipe(command) && lonely_builtin(command, envp))
+	if (!has_pipe(command) && lonely_builtin(command, *envp))
 	{
-		execve_cmd(command, envp, fd);
+		execve_cmd(command, *envp, fd);
 		return (0);
 	}
 	root = ft_create_tree(command);
@@ -196,14 +180,12 @@ int	ultimate_execve(char *command, char **envp)
 	if (id == 0)
 	{
 		setup_signals_children();
-		execve_pipe(root, envp);
+		execve_pipe(root, *envp);
 		ft_free_tree(root);
-		//ft_tabfree(env);
 		exit(0);
 	}
 	else
 		wait(NULL);
-	//ft_tabfree(env);
 	ft_free_tree(root);
 	return (0);
 }

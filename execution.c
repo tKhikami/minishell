@@ -237,13 +237,12 @@ int	open_inputs(int fd, t_token *tok, int descriptor[])
 	return (open_inputs(fd, tok->next, descriptor));
 }
 
-int	execve_inout(int in, int out, char **com, char **envp)
+int	execve_inout(int in, int out, char **com, t_list *envp)
 {
 	char	*path;
-	t_list	*env;
 	int		built;
+	char	**env;
 
-	env = NULL;
 	built = -1;
 	if (com == NULL)
 		return (-1);
@@ -253,15 +252,17 @@ int	execve_inout(int in, int out, char **com, char **envp)
 		dup2(out, STDOUT_FILENO);
 	if (is_builtin(com[0]))
 	{
-		env_to_tlist(&env, envp, -1);
-		built = execve_builtin(com, env);
-		ft_lstclear(&env, free);
+		built = execve_builtin(com, envp);
 		return (built);
 	}
-	path = get_path(com[0], envp);
+	env = ft_lsttotab(envp);
+	if (!env)
+		return (-1);
+	path = get_path(com[0], env);
 	if (path == NULL)
 		return(-1);
-	execve(path, com, envp);
+	execve(path, com, env);
 	free(path);
+	ft_tabfree(env);
 	return (-1);
 }
