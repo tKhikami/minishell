@@ -100,6 +100,8 @@ char	**ultimate_get_argument(t_token *tok, t_list *env)
 	if (tok == NULL || env == NULL)
 		return (NULL);
 	lst = divise_all_argument(tok, env);
+	if (!lst)
+		return (NULL);
 	tmp = lst;
 	tab = (char **)tmp->content;
 	tmp = tmp->next;

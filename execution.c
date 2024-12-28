@@ -135,8 +135,8 @@ int	open_heredoc(t_token *tmp)
 		if (!str)
 		{
 			close(fd[1]);
-			ft_putstr_fd("warning: here-document at \
-				line 1 delimited by end-of-file (wanted `", 2);
+			ft_putstr_fd("warning: here-document ", 2);
+			ft_putstr_fd("delimited by end-of-file (wanted `", 2);
 			ft_putstr_fd(doc, 2);
 			ft_putstr_fd("`)\n", 2);
 			free(doc);

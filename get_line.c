@@ -25,6 +25,7 @@ void	get_line(char *envp[])
 		str = readline("$>");
 		if (str != NULL)
 		{
+			add_history(str);
 			ultimate_execve(str, &my_env);
 			free(str);
 		}
@@ -36,5 +37,6 @@ void	get_line(char *envp[])
 			return ;
 		}
 	}
+	ft_lstclear(&my_env, free);
 	return ;
 }
