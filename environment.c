@@ -6,7 +6,7 @@
 /*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:06:33 by nyrandri          #+#    #+#             */
-/*   Updated: 2024/12/25 10:30:03 by nyrandri         ###   ########.fr       */
+/*   Updated: 2024/12/29 14:57:42 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,14 +93,24 @@ t_list	*get_all_variable(char **tab)
 t_list	*variable_chr(t_list *env, char *str)
 {
 	t_list	*tmp;
+	t_assign	*ass;
 
 	if (str == NULL)
+	{
 		return (NULL);
+	}
 	tmp = env;
 	while (tmp != NULL)
 	{
-		if (ft_strcmp(((t_assign *)tmp->content)->var_name, str) == 0)
+		ass = extract_assign((char *)(tmp->content));
+		if (!ass)
+			return (NULL);
+		if (ft_strcmp(ass->var_name, str) == 0)
+		{
+			remove_assign(ass);
 			return (tmp);
+		}
+		remove_assign(ass);
 		tmp = tmp->next;
 	}
 	return (tmp);

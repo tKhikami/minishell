@@ -6,7 +6,7 @@
 /*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:14:45 by nyrandri          #+#    #+#             */
-/*   Updated: 2024/12/09 09:24:49 by nyrandri         ###   ########.fr       */
+/*   Updated: 2024/12/29 16:05:55 by atolojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ char	*get_dollar_value(t_list *env, char *str)
 {
 	t_list	*ptr;
 	char	*ret;
+	t_assign	*ass;
 
 	if (env == NULL || str == NULL)
 		return (NULL);
@@ -105,7 +106,13 @@ char	*get_dollar_value(t_list *env, char *str)
 	if (ptr == NULL)
 		ret = ft_strdup("");
 	else
-		ret = ft_strdup(((t_assign *)ptr->content)->value);
+	{
+		ass = extract_assign(ptr->content);
+		if (!ass)
+			return (NULL);
+		ret = ft_strdup(ass->value);
+		remove_assign(ass);
+	}
 	if (ret == NULL)
 		return (NULL);
 	else
@@ -180,9 +187,11 @@ char	**ultimate_change_dollar(t_list *env, char **tab)
 	while (tab[i] != NULL)
 	{
 		tmp = dollar_expand(env, tab[i]);
-		if (tmp == NULL)
-			ft_tabfree(tab);
-		free(tab[i]);
+		/*if (tmp == NULL)
+			ft_tabfree(tab);*/
+		if (!tmp)
+			return (NULL);
+		//free(tab[i]);
 		tab[i] = tmp;
 		i++;
 	}

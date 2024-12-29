@@ -27,13 +27,19 @@ char	*path_exist(char *executable, t_list *env)
 	char	path[1024];
 	t_list	*tmp;
 	char	*value;
+	t_assign	*ass;
 	char	*ptr;
 	char	buffer[300];
 
 	tmp = variable_chr(env, "PATH");
 	if (tmp == NULL)
+	{
 		return (NULL);
-	value = ((t_assign *)tmp->content)->value;
+	}
+	ass = extract_assign(tmp->content);
+	if (!ass)
+		return (NULL);
+	value = ass->value;
 	ft_strlcpy(path, value, ft_strlen(value) + 1);
 	ptr = ft_strtok(path, ':');
 	while (ptr != NULL)
@@ -46,8 +52,12 @@ char	*path_exist(char *executable, t_list *env)
 		if (ptr == NULL)
 			ptr = ft_strtok(NULL, ':');
 		else
+		{
+			remove_assign(ass);
 			return (ptr);
+		}
 	}
+	remove_assign(ass);
 	perror("minishell");
 	return (ptr);
 }
@@ -68,15 +78,20 @@ char	*get_path(char *executable, char **envp)
 	t_list	*env;
 	char	*path;
 
-	env = get_all_variable(envp);
+	env = NULL;
+	env_to_tlist(&env, envp, -1);
 	if (env == NULL)
 		return (NULL);
 	tmp = variable_chr_tab("PATH", envp);
 	if (tmp == NULL || is_absolute_path(executable))
+	{
 		path = path_valid(executable);
+	}
 	else
+	{
 		path = path_exist(executable, env);
-	ft_lstclear(&env, &free_variable);
+	}
+	ft_lstclear(&env, free);
 	return (path);
 }
 

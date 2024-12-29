@@ -54,7 +54,12 @@ void	close_pipe(int fd[])
 	close(fd[0]);
 	close(fd[1]);
 }
+/*
+int	set_status(int status)
+{
+	static int	res;
 
+	if (status)*/
 int	get_status_code(int id[], int fd[])
 {
 	int	status;
