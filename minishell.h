@@ -6,7 +6,7 @@
 /*   By: nyrandri <nyrandri@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 11:01:10 by nyrandri          #+#    #+#             */
-/*   Updated: 2024/12/27 16:12:25 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/12/30 11:48:21 by nyrandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,6 @@ t_node		*ft_create_tree(char *str);
 /****************** EXEC FUNCTION *******************/
 
 void		check_redirections(char *str, char *envp[]);
-char		*path_exist(char *exec, t_list *env);
 char		**get_argument(t_token *tok, t_list *env);
 char		*get_variable(char *str, t_list *env);
 void		setup_signals_parent(void);

@@ -22,6 +22,12 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 
+typedef struct  s_free
+{
+	void	*ptr;
+	int		type;
+}	t_free;
+
 /******************* TOOLS ******************/
 
 int		ft_lstprint(t_list *lst, int (*format)(void *));
@@ -69,7 +75,7 @@ char	**ultimate_get_argument(t_token *tok, t_list *env);
 /**************** EXECUTION ****************/
 
 char	*path_valid(char *path);
-char	*path_exist(char *executable, t_list *env);
+char	*path_exist(char *executable, char *path);
 int		is_absolute_path(char *executable);
 char	*get_path(char *executable, char **envp);
 int		open_file(t_token *tmp, int descriptor[]);
@@ -89,5 +95,16 @@ int		*manage_heredoc(t_node *node);
 void	setup_signals_children(void);
 int		set_heredoc_status(int set);
 void	get_heredoc_signal(void);
+
+/***************** TO_FREE *******************/
+
+t_free  *creat_tfree(void *ptr, int type);
+void    delone_tfree(t_free *tfree, void (*del)(void *));
+void    add_tfree(t_list **lst, void *ptr, int type);
+void    oper_type_tfree(void *tfree);
+void    adapt_free_token(void *tok);
+void    adapt_tabfree(void *tab);
+void    adapt_lstclear(void *lst);
+void    handler_tfree(t_list **lstroot, void *ptr, int type);
 
 #endif

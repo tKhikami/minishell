@@ -27,13 +27,14 @@ int	execve_cmd(char *command, t_list *envp, int descriptor[])
 		return (-1);
 	}
 	cmd = ultimate_get_argument(tok, envp);
+	handler_tfree(NULL, tok, 3);
+	handler_tfree(NULL, cmd, 2);
 	execve_inout(fd[0], fd[1], cmd, envp);
 	if (fd[0] >= 0 && fd[0] != STDIN_FILENO)
 		close(fd[0]);
 	if (fd[1] >= 0 && fd[1] != STDOUT_FILENO)
 		close(fd[1]);
-	ft_tabfree(cmd);
-	free_token(tok);
+	handler_tfree(NULL, NULL, -1);
 	return (-1);
 }
 
@@ -101,6 +102,7 @@ int	execve_pipe(t_node *root, t_list *envp)
 			close_pipe(fd);
 			execve_pipe(root->right, envp);
 		}
+		handler_tfree(NULL, NULL, -1);
 		return (get_status_code(id, fd));
 	}
 	else
@@ -192,9 +194,14 @@ int	ultimate_execve(char *command, t_list **envp)
 
 int	main(int n, char *vector[], char *envp[])
 {
+	t_list	*lst;
+
+	lst = NULL;
+	handler_tfree(&lst, NULL, -1);
 	if (n != 1)
 		return (-1);
 	(void)vector;
 	get_line(envp);
+	ft_lstfree(&lst);
 	return (0);
 }

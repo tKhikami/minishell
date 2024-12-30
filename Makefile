@@ -36,9 +36,9 @@ SRC = main.c \
 	  separation.c \
 	  tools.c \
 	  execution.c \
-	  redirections.c \
 	  set_heredoc.c \
-	  exit_status.c
+	  exit_status.c \
+	  to_free.c
 
 OBJ = $(SRC:.c=.o)
 

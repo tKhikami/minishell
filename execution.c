@@ -22,24 +22,18 @@ char	*path_valid(char *path)
 		return (NULL);
 }
 
-char	*path_exist(char *executable, t_list *env)
+char	*path_exist(char *executable, char *path)
 {
-	char	path[1024];
-	t_list	*tmp;
-	char	*value;
 	char	*ptr;
 	char	buffer[300];
 
-	tmp = variable_chr(env, "PATH");
-	if (tmp == NULL)
+	if (path == NULL)
 		return (NULL);
-	value = ((t_assign *)tmp->content)->value;
-	ft_strlcpy(path, value, ft_strlen(value) + 1);
 	ptr = ft_strtok(path, ':');
 	while (ptr != NULL)
 	{
-		ft_strlcpy(buffer, ptr, ft_strlen(value) + 1);
-		ft_strlcat(buffer, "/", ft_strlen(value) + 2);
+		ft_strlcpy(buffer, ptr, ft_strlen(path) + 1);
+		ft_strlcat(buffer, "/", ft_strlen(path) + 2);
 		ft_strlcat(buffer, executable, ft_strlen(executable) \
 				+ ft_strlen(buffer) + 2);
 		ptr = path_valid(buffer);
@@ -75,8 +69,9 @@ char	*get_path(char *executable, char **envp)
 	if (tmp == NULL || is_absolute_path(executable))
 		path = path_valid(executable);
 	else
-		path = path_exist(executable, env);
+		path = path_exist(executable, tmp);
 	ft_lstclear(&env, &free_variable);
+	free(tmp);
 	return (path);
 }
 
@@ -260,7 +255,10 @@ int	execve_inout(int in, int out, char **com, t_list *envp)
 		return (-1);
 	path = get_path(com[0], env);
 	if (path == NULL)
+	{
+		free(env);
 		return(-1);
+	}
 	execve(path, com, env);
 	free(path);
 	ft_tabfree(env);

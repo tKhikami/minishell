@@ -6,11 +6,11 @@
 /*   By: atolojan <atolojan@student.42antanana      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 10:43:03 by atolojan          #+#    #+#             */
-/*   Updated: 2024/12/28 13:39:42 by atolojan         ###   ########.fr       */
+/*   Updated: 2024/12/30 12:27:54 by nyrandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "header.h"
 
 static int	ft_atol(char *str, int *err)
 {
@@ -56,6 +56,7 @@ int	ft_exit(const char **tab)
 			ft_putstr_fd("exit: ", 2);
 			ft_putstr_fd((char *)(tab[1]), 2);
 			ft_putstr_fd(": numeric argument required\n", 2);
+			handler_tfree(NULL, NULL, -1);
 			exit(2);
 		}
 		if (tab[2] != NULL)
@@ -64,5 +65,6 @@ int	ft_exit(const char **tab)
 			return (1);
 		}
 	}
+	handler_tfree(NULL, NULL, -1);
 	exit(atol);
 }
